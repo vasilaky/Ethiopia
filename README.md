@@ -3,6 +3,7 @@
 ## Organization/Directory Structure
 ```
 .
+├── .gitignore        # So that we don't commit compiled files or our environment passwords
 ├── README.md         # This will be how to test/run the app & have basic info
 ├── requirements.txt  # These are the dependencies that you need to install for the app to run
 ├── run.py            # Runs the app!
