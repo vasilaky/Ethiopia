@@ -4,8 +4,7 @@
 
 CREATE TABLE users
 (
-	id			INT PRIMARY KEY,
-
-	phone_no	TEXT,
-	last_name	TEXT,
-	first_name	TEXT);
+  id            SERIAL UNIQUE,
+  cell_phone    TEXT,
+  name          TEXT
+);
