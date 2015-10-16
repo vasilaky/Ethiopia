@@ -1,6 +1,6 @@
 # EthiopiaSMS
 
-1) Create an `.env` file with all the variables from the `config.py` file defined
+1) Create an `.env` file with all the variables from the `config.py` file defined.
 
 2) Type `source .env` to upload your environment variables into local memory.
 
