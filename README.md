@@ -1,5 +1,10 @@
 # EthiopiaSMS
 
+1) Create an `.env` file with all the variables from the `config.py` file defined
+2) Type `source .env` to upload your environment variables into local memory.
+3) Install all the dependencies we currently have with `pip install -r requirements.txt`
+4) Run the app with `python run.py`
+
 ## Organization/Directory Structure
 ```
 .
