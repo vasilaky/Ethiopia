@@ -1,8 +1,16 @@
 # EthiopiaSMS
 
 1) Create an `.env` file with all the variables from the `config.py` file defined
+
 2) Type `source .env` to upload your environment variables into local memory.
+
 3) Install all the dependencies we currently have with `pip install -r requirements.txt`
+- If you don't want the dependencies installed locally you can create a virtual machine by:
+- `pip install virtualenv`
+- `virtualenv venv`
+- `source venv/bin/activate`
+- Then install all the requirements!
+
 4) Run the app with `python run.py`
 
 ## Organization/Directory Structure
