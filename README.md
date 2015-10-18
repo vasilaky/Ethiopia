@@ -1,6 +1,12 @@
 # EthiopiaSMS
 
-1) Create an `.env` file with all the variables from the `config.py` file defined.
+1) Create an `.env` file with all the variables from the `config.py` file defined. The structure is as follows:
+   ```
+  export TO_NUMBER="[Actual Phone Number]"
+  export FROM_NUMBER="[Actual Phone Number]"
+  export ACCOUNT_SID="[Our Twilio Account SID]"
+  export AUTH_TOKEN="[Our Twilio Auth Token]"
+  ```
 
 2) Type `source .env` to upload your environment variables into local memory.
 
