@@ -8,13 +8,19 @@
     <title>EthiopiaSMS Admin System</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
 
   </head>
   <body>
+    <div class="col-xs-4">
     <h1>Enter Phone Number to Send a Voice Message: </h1>
-    <input type="text" placeholder="Phone Number" class="form-control">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Send</a>
+    <form name="text_message" action="/" method="post">
+    
+    <input name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
+    <input name="text_message" type="text" placeholder="Message" class="form-control">
+    <button class="btn btn-primary btn-lg">Send</button>
+    </form>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

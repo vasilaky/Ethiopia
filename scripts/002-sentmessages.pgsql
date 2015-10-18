@@ -8,7 +8,7 @@ CREATE TABLE sentmessages
   status       TEXT,
 
   cell_phone   TEXT,
-  user_id      SERIAL UNIQUE references users(id),
+  user_id      SERIAL references users(id),
   message      TEXT PRIMARY KEY,
   convo_id     SERIAL UNIQUE,
 
