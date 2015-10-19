@@ -1,13 +1,13 @@
 from EthiopiaSMS import app
 from flask import render_template, request, redirect, g
-from psycopg2 import connect, extras
 #from config import *
 from twilio.rest import TwilioRestClient
 from config import *
+from database_helper import *
 
 @app.route("/", methods=["GET","POST"])
 def index():
-  if request.method=="POST":
+  if request.method == "POST":
     cell_number = request.form.get("cell_phone", None)
     text_message = request.form.get("text_message", None)
 
@@ -26,3 +26,21 @@ def index():
     print call.sid
 
   return render_template("index.html")
+
+@app.route("/users", methods=["GET","POST"])
+def users():
+  user_list = get_all_users()
+  
+  if request.method == "POST":
+    cell_phone = request.form.get("cell_phone", None)
+    name = request.form.get("name", None)
+    
+    user_entry = {
+    "name": name,
+    "cell_phone": cell_phone
+    }
+
+    add_user(user_entry)
+    user_list = get_all_users()
+
+  return render_template("users.html", user_list=user_list)
