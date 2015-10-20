@@ -1,1 +1,1 @@
-web: gunicorn ethiopia-sms:app --log-file=-
+web: gunicorn ethiopia-sms:app --log-file -
