@@ -27,7 +27,7 @@
             <div class="form-group">
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
-          <button id="user_add" type="submit" class="btn btn-default">Send</button>
+          <button id="user_add" type="submit" class="btn btn-default">Add User</button>
           </form>
         </div>
       </div>
@@ -35,18 +35,25 @@
     <div class="col-md-4 col-xs-offset-1">
     <table class="table table-hover table-bordered table-striped">
       <tr>
+        <th> Id </th>
         <th> Name </th>
         <th> Cell Phone </th>
+        <th> Send them a Message? </th>
       </tr>
+      <form method="post">
       {% if user_list %}
         {% for user in user_list %}
         <tr>
+          <td>{{user.id}}</td>
           <td>{{user.name}}</td>
           <td>{{user.cell_phone}}</td>
+          <td><input name="send" value="{{user.id}}" type="checkbox"></td>
         </tr>
         {% endfor %}
-    {% endif %}
+      {% endif %}
     </table>
+    <button id="group_send" type="submit" class="btn btn-default col-md-offset-7">Send To Checked</button>
+    </form>
   </div>
 
 

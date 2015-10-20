@@ -40,7 +40,11 @@ def users():
     "cell_phone": cell_phone
     }
 
-    add_user(user_entry)
+    if name != None:
+      add_user(user_entry)
+
+    to_send = request.form.getlist("send", None)
+    print to_send
     user_list = get_all_users()
 
   return render_template("users.html", user_list=user_list)

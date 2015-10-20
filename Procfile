@@ -1,1 +1,1 @@
-web: gunicorn ethiopia-sms:app --preload
+web: gunicorn ethiopia-sms:app
