@@ -26,6 +26,18 @@ def get_all_users():
         with dict_cursor(conn) as db:
           q = '''SELECT * FROM users'''
           db.execute(q)
-          data = None
           data = db.fetchall()
   return data
+
+def get_user_info_from_id_list(id_list):
+  user_info = []
+  with connect(DATABASE_URL) as conn:
+    with dict_cursor(conn) as db:
+      for id_number in id_list:
+        q = 'SELECT * FROM USERS WHERE id = {id_number}'.format(id_number=id_number)
+        db.execute(q)
+        result = db.fetchone()
+        print result
+        user_info.append(result)
+
+  return user_info
