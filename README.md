@@ -6,6 +6,7 @@
   export FROM_NUMBER="[Actual Phone Number]"
   export ACCOUNT_SID="[Our Twilio Account SID]"
   export AUTH_TOKEN="[Our Twilio Auth Token]"
+  export DATABASE_URL="[Database_Url]"
   ```
 
 2) Type `source .env` to upload your environment variables into local memory.
