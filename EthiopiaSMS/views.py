@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, g
 from twilio.rest import TwilioRestClient
 from config import *
 from database_helper import *
-
+from twilio_helper import *
 
 @app.route("/", methods=["GET","POST"])
 def index():
@@ -55,7 +55,7 @@ def users():
     ####################
 
     to_send = request.form.getlist("send", None)
-    get_user_info_from_id_list(to_send)
+    send_to_list(get_user_info_from_id_list(to_send))
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -65,5 +65,4 @@ def users():
 def send_to_list(database_users):
   message = "Hello my friend"
   for user_entry in database_users:
-    send_message(message, user_entry.cell_phone)
-    print "Succes"
+    send_message(message, user_entry['cell_phone'])
