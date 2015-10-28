@@ -1,1 +1,1 @@
-web: gunicorn ethiopia-sms:app
+web: gunicorn run:app
