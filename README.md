@@ -1,5 +1,5 @@
 # EthiopiaSMS
-
+## How to Set Up For the First Time
 1) Create an `.env` file with all the variables from the `config.py` file defined. The structure is as follows:
    ```
   export TO_NUMBER="[Actual Phone Number]"
@@ -16,9 +16,10 @@
 - `pip install virtualenv`
 - `virtualenv venv`
 - `source venv/bin/activate`
-- Then install all the requirements!
+- Then install all the requirements! with `pip install -r requirements.txt`
 
-4) Run the app with `python run.py`
+## How to Run the Application
+1) Run the app with `python run.py`
 
 ## Organization/Directory Structure
 ```
