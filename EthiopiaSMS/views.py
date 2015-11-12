@@ -55,7 +55,14 @@ def users():
     ####################
 
     to_send = request.form.getlist("send", None)
+    to_delete = request.form.getlist("delete", None)
+    
     send_to_list(get_user_info_from_id_list(to_send))
+    users = get_user_info_from_id_list(to_delete)
+    for user in users:
+      delete_user(user)
+
+
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
