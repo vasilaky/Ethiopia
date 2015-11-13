@@ -56,8 +56,7 @@ def get_user_info_from_id_list(id_list):
 
   return user_info
 
-def write_call_to_db(call):
-  # test
+# Adding the calls to the database
 
-def get_call_list():
-  # test
+
+# Fetching Calls from the database

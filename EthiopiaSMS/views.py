@@ -59,8 +59,7 @@ def users():
     to_send = request.form.getlist("send", None)
     # Searches from our DB for each user ID and sends to this list of IDs
     to_delete = request.form.getlist("delete", None)
-
-	send_to_list(get_user_info_from_id_list(to_send))
+    send_to_list(get_user_info_from_id_list(to_send))
     users = get_user_info_from_id_list(to_delete)
     for user in users:
       delete_user(user)
@@ -78,3 +77,8 @@ def send_to_list(database_users):
 
   for user_entry in database_users:
     send_call(user_entry['cell_phone'])
+
+@app.route("/get_csv", methods=["POST"])
+def foo():
+  page = get_logs_csv()
+  return redirect(page)

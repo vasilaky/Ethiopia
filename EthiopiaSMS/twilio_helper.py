@@ -30,6 +30,7 @@ def get_call_logs():
 	return client.calls.list()
 
 def get_logs_csv():
-	csv_request_url = ('https://api.twilio.com/2010-04-01/Accounts/{}/Calls.csv').format(ACCOUNT_SID)
-	test = requests.get(csv_request_url)
+  csv_request_url = ('https://api.twilio.com/2010-04-01/Accounts/{}/Calls.csv').format(ACCOUNT_SID)
+  return csv_request_url
+
 

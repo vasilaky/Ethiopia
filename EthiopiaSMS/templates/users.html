@@ -27,8 +27,12 @@
             <div class="form-group">
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
-          <button id="user_add" type="submit" class="btn btn-default">Add User</button>
+            <button id="user_add" type="submit" class="btn btn-default">Add User</button>
           </form>
+            <form name="get_csv" action="/get_csv" method="post">
+    <button type="submit" value="Get CSV of Calls" /> Get CSV
+  </form>
+
         </div>
       </div>
 
@@ -57,8 +61,6 @@
     <button id="confirm" type="submit" class="btn btn-default col-md-offset-7">Confirm Action</button>
     </form>
   </div>
-
-
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
