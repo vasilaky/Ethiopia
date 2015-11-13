@@ -5,6 +5,7 @@ from twilio.rest import TwilioRestClient
 from config import *
 from database_helper import *
 from twilio_helper import *
+from datetime import date
 
 @app.route("/", methods=["GET","POST"])
 def index():
@@ -54,8 +55,13 @@ def users():
     # For sending to a list of people selected on our front end
     ####################
 
+    # Get list of user IDs from the selected names
     to_send = request.form.getlist("send", None)
+    
+    # Searches from our DB for each user ID and sends to this list of IDs
     send_to_list(get_user_info_from_id_list(to_send))
+
+    #Check Status of call
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -63,6 +69,6 @@ def users():
   return render_template("users.html", user_list=user_list)
 
 def send_to_list(database_users):
-  message = "Hello my friend"
+
   for user_entry in database_users:
-    send_message(message, user_entry['cell_phone'])
+    send_call(user_entry['cell_phone'])

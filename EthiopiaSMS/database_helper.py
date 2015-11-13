@@ -37,7 +37,13 @@ def get_user_info_from_id_list(id_list):
         q = 'SELECT * FROM USERS WHERE id = {id_number}'.format(id_number=id_number)
         db.execute(q)
         result = db.fetchone()
-        print "Added {result1} to our database".format(result1=result)
+        print "We were able to fetch {} from our database.".format(result)
         user_info.append(result)
 
   return user_info
+
+def write_call_to_db(call):
+  # test
+
+def get_call_list():
+  # test
