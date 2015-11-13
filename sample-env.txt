@@ -1,0 +1,5 @@
+export TO_NUMBER="7149075336"
+export FROM_NUMBER="+27875505181"
+export ACCOUNT_SID="AC37247ffca6dd6f9ae4fa5923af622e1f"
+export AUTH_TOKEN="d5fadd8e4423fda6fb73df0e5eff1350"
+export DATABASE_URL="postgres://upsbdetmocvstr:sdG6HWnbJtbYznZb-AA81NdAQf@ec2-75-101-162-243.compute-1.amazonaws.com:5432/d819pkq8jmbs0c"

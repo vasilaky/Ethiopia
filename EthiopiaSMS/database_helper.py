@@ -18,6 +18,20 @@ def add_user(user_entry):
           VALUES ( %(name)s, %(cell_phone)s) '''
           # Insert a row of data
           db.execute(q, {"name":user_entry['name'], "cell_phone":user_entry['cell_phone']})
+
+
+#
+# Deleting a user
+#
+def delete_user(user_entry):
+  with connect(DATABASE_URL) as conn:
+        with dict_cursor(conn) as db:
+
+          q = ''' DELETE FROM users WHERE name = %(name)s '''
+          # Insert a row of data
+          db.execute(q, {"name":user_entry['name']})
+
+
 #
 # Getting all Current users from the Database
 #
@@ -37,7 +51,7 @@ def get_user_info_from_id_list(id_list):
         q = 'SELECT * FROM USERS WHERE id = {id_number}'.format(id_number=id_number)
         db.execute(q)
         result = db.fetchone()
-        print "We were able to fetch {} from our database.".format(result)
+        print "Added {user} to our database".format(user=result)
         user_info.append(result)
 
   return user_info
