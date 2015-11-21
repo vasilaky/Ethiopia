@@ -3,7 +3,6 @@ from twilio.rest import TwilioRestClient
 from config import *
 import requests
 
-
 client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_call(to_number):
@@ -15,22 +14,18 @@ def send_call(to_number):
     url = fallback_url
     )
 
-
   # function will log this into a database
 
-  print "We just called the number {}".format(call.toformatted)
-  formatted_call = {
-  	"phone_number": to_number,
-  	"date_created": to.datecreated,
-  	"status": to.status
-  }
-  return call
+  # #print "We just called the number {}".format(call.toformatted)
+  # formatted_call = {
+  # 	"phone_number": to_number,
+  # 	"date_created": call.datecreated,
+  # 	"status": call.status
+  # }
 
 def get_call_logs():
-	return client.calls.list()
+  return client.calls.list()
 
 def get_logs_csv():
   csv_request_url = ('https://api.twilio.com/2010-04-01/Accounts/{}/Calls.csv').format(ACCOUNT_SID)
   return csv_request_url
-
-

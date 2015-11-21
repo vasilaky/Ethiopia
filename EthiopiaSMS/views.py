@@ -1,11 +1,14 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, g
+from flask import render_template, request, redirect, g, url_for
 #from config import *
 from twilio.rest import TwilioRestClient
 from config import *
 from database_helper import *
 from twilio_helper import *
 from datetime import date
+
+user_list = None
+call_list = None
 
 @app.route("/", methods=["GET","POST"])
 def index():
@@ -32,25 +35,30 @@ def index():
 
 @app.route("/users", methods=["GET","POST"])
 def users():
-  user_list = get_all_users()
+  ####################
+  # For adding a new person into our database
+  ####################
+  cell_phone = request.form.get("cell_phone", None)
+  name = request.form.get("name", None)
   
-  if request.method == "POST":
-    ####################
-    # For adding a new person into our database
-    ####################
-    cell_phone = request.form.get("cell_phone", None)
-    name = request.form.get("name", None)
+  user_entry = {
+  "name": name,
+  "cell_phone": cell_phone
+  }
+
+  # only add if all the fields are filled out
+  if name != None:
+    add_user(user_entry)
+
+  # Get all of the current users, updated from the database
+  user_list = get_all_users()
+  call_list = get_call_logs()
     
-    user_entry = {
-    "name": name,
-    "cell_phone": cell_phone
-    }
 
-    # only add if all the fields are filled out
-    if name != None:
-      add_user(user_entry)
+  return render_template("users.html", user_list=user_list, call_list=call_list)
 
-
+@app.route("/send_call_route", methods=["POST", "GET"])
+def send_call_route():
     ####################
     # For sending to a list of people selected on our front end
     ####################
@@ -64,14 +72,13 @@ def users():
     for user in users:
       delete_user(user)
 
-
-
     #Check Status of call
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
+    call_list = get_call_logs()
 
-  return render_template("users.html", user_list=user_list)
+    return redirect(url_for('users'))
 
 def send_to_list(database_users):
 
@@ -82,3 +89,8 @@ def send_to_list(database_users):
 def foo():
   page = get_logs_csv()
   return redirect(page)
+
+@app.route("/calls", methods=["GET", "POST"])
+def calls():
+  call_list = get_call_logs()
+  return render_template("calls.html", call_list=call_list)

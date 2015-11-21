@@ -13,31 +13,51 @@
   </head>
   <body>
       <div class="row">
-        <div class="col-md-4 col-xs-offset-1">
-          <h2> Current Users in Our System </h2>
-        </div>
 
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-md-4 col-xs-offset-1">
+      <table class="table table-hover table-bordered table-striped">
+        <h2> Call History </h2>
+        <tr>
+          <th> Cell Phone </th>
+          <th> Call Start Time </th>
+          <th> Call Status </th>
+          <th> Call Duration </th>
+          <th> Re-send Call? </th>
+        </tr>
+        {% for call in call_list %}
+        <tr id="{{ call.sid }}">
+          <td>{{ call.to }} </td>
+          <td>{{ call.start_time }}</td>
+          <td>{{ call.status }}</td>
+          <td>{{ call.duration }}</td>
+          <td><input name="send" value="{{call.sid}}" type="checkbox"></td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <form name="get_csv" action="/get_csv" method="post">
+        <button class="btn btn-default col-md-offset-7" type="submit" value="Get CSV of Calls" /> Get CSV
+      </form>
+    </div>
+
+    <div class="col-md-6 col-md-offset-1">
           <h2> Add a new user </h2>
           <p id="success_text" style="display: none"> Success! </p>
           <form class="form-inline" name="new_user" action="/users" method="post">
             <div class="form-group">
-              <input class="form-control" name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
+              <input minlength="11" class="form-control" name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
             </div>
             <div class="form-group">
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
             <button id="user_add" type="submit" class="btn btn-default">Add User</button>
           </form>
-            <form name="get_csv" action="/get_csv" method="post">
-    <button type="submit" value="Get CSV of Calls" /> Get CSV
-  </form>
 
         </div>
-      </div>
 
     <div class="col-md-4 col-xs-offset-1">
     <table class="table table-hover table-bordered table-striped">
+    <h2> Users in Our System </h2>
       <tr>
         <th> Id </th>
         <th> Name </th>
@@ -45,7 +65,7 @@
         <th> Send them a Message? </th>
         <th> Delete User? </th>
       </tr>
-      <form method="post">
+      <form method="post" action="send_call_route">
       {% if user_list %}
         {% for user in user_list %}
         <tr>
@@ -58,9 +78,14 @@
         {% endfor %}
       {% endif %}
     </table>
-    <button id="confirm" type="submit" class="btn btn-default col-md-offset-7">Confirm Action</button>
-    </form>
+    <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
+    </form><p>
+    <div style="display:none" id="call_sent" class="col-md-offset-10">Success!</div></p>
   </div>
+
+      </div>
+
+    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -71,6 +96,10 @@
 <script>
 $('#user_add').click(function(){
   $('#success_text').show();
-  console.log("success");
 })
+
+$('#confirm').click(function(){
+  $('#call_sent').show();
+})
+
 </script>
