@@ -1,30 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>EthiopiaSMS Admin System</title>
+{% extends "base.html" %}
+{% block results %}
 
-    <!-- Bootstrap -->
-    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation" class="active"> <a href="/"> Home </a> </li>
+  <li role="presentation"> <a href="/users"> Users </a></li>
+  <li role="presentation"> <a href="/calls"> Call History </a></li>
+</ul>
 
-  </head>
-  <body>
-    <div class="col-xs-4">
-    <h1>Enter Phone Number to Send a Voice Message: </h1>
-    <form name="text_message" action="/" method="post">
-    
-    <input name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
-    <input name="text_message" type="text" placeholder="Message" class="form-control">
-    <button class="btn btn-primary btn-lg">Send</button>
-    </form>
+<div class="jumbotron" style="background: white">
+    <div class="container">
+      <h1>Welcome to EthiopiaSMS</h1>
+      <p> Get Ready to Send some calls</p>
+      <p><a class="btn btn-primary btn-lg" href="/users" role="button">Start Here</a></p>
     </div>
+</div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-  </body>
-</html>
+{% endblock %}

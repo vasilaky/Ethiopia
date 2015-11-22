@@ -13,6 +13,7 @@ def send_call(to_number):
     to = to_number,
     url = fallback_url
     )
+  return call.sid
 
   # function will log this into a database
 

@@ -1,69 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>EthiopiaSMS Admin System</title>
+{% extends "base.html" %}
+{% block results %}
 
-    <!-- Bootstrap -->
-    <link href="static/css/bootstrap.min.css" rel="stylesheet">
-
-  </head>
-  <body>
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation"> <a href="/"> Home </a> </li>
+  <li role="presentation" class="active"> <a href="/users"> Users </a></li>
+  <li role="presentation"> <a href="/calls"> Call History </a></li>
+</ul>
       <div class="row">
 
-        <div class="col-md-4 col-xs-offset-1">
-      <table class="table table-hover table-bordered table-striped">
-        <h2> Call History </h2>
-        <tr>
-          <th> Cell Phone </th>
-          <th> Call Start Time </th>
-          <th> Call Status </th>
-          <th> Call Duration </th>
-          <th> Re-send Call? </th>
-        </tr>
-        {% for call in call_list %}
-        <tr id="{{ call.sid }}">
-          <td>{{ call.to }} </td>
-          <td>{{ call.start_time }}</td>
-          <td>{{ call.status }}</td>
-          <td>{{ call.duration }}</td>
-          <td><input name="send" value="{{call.sid}}" type="checkbox"></td>
-        </tr>
-        {% endfor %}
-      </table>
 
-      <form name="get_csv" action="/get_csv" method="post">
-        <button class="btn btn-default col-md-offset-7" type="submit" value="Get CSV of Calls" /> Get CSV
-      </form>
-    </div>
-
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-5 col-sm-offset-1">
           <h2> Add a new user </h2>
           <p id="success_text" style="display: none"> Success! </p>
           <form class="form-inline" name="new_user" action="/users" method="post">
-            <div class="form-group">
-              <input minlength="11" class="form-control" name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
+            <div class="form-group input-group">
+              <span class="input-group-addon">+</span>
+              <input minlength="10" class="form-control" name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
             </div>
             <div class="form-group">
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
             <button id="user_add" type="submit" class="btn btn-default">Add User</button>
+            <input class="form-control" type="text" name="regions" list="namesregion" placeholder="Region Name">
+            <datalist id="namesregion">
+            {% for region in ethiopia_info.regions %}
+              <option>{{region}}</option>
+            {% endfor %}
+          </datalist>
+
+          <input class="form-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
+            <datalist id="namesvillage">
+            {% for village in ethiopia_info.village %}
+              <option>{{village}}</option>
+            {% endfor %}
+          </datalist>
           </form>
+          
 
         </div>
 
-    <div class="col-md-4 col-xs-offset-1">
+    <div class="col-md-5">
     <table class="table table-hover table-bordered table-striped">
     <h2> Users in Our System </h2>
+    <p> The current time in Ethiopia is {{ethiopia_info.time_string}}</p>
       <tr>
         <th> Id </th>
         <th> Name </th>
         <th> Cell Phone </th>
         <th> Send them a Message? </th>
         <th> Delete User? </th>
+        <th> Times Called </th>
       </tr>
       <form method="post" action="send_call_route">
       {% if user_list %}
@@ -74,6 +60,11 @@
           <td>{{user.cell_phone}}</td>
           <td><input name="send" value="{{user.id}}" type="checkbox"></td>
           <td><input name="delete" value="{{user.id}}" type="checkbox"></td>
+          {% if user.calls %}
+            <td> <a id="{{user.calls[0]}}" class="highlighter" href="/calls#{{user.calls[0]}}">{{user.calls|length}}</a></td>
+          {% else %}
+            <td> 0 </td>
+          {% endif %}
         </tr>
         {% endfor %}
       {% endif %}
@@ -84,22 +75,4 @@
   </div>
 
       </div>
-
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-  </body>
-</html>
-
-<script>
-$('#user_add').click(function(){
-  $('#success_text').show();
-})
-
-$('#confirm').click(function(){
-  $('#call_sent').show();
-})
-
-</script>
+{% endblock %}

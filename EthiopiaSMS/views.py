@@ -5,10 +5,15 @@ from twilio.rest import TwilioRestClient
 from config import *
 from database_helper import *
 from twilio_helper import *
-from datetime import date
+import datetime
+import requests, json
 
 user_list = None
 call_list = None
+ethiopia_info = {
+  "regions": ["Afar", "Amhara"],
+  "villages": []
+}
 
 @app.route("/", methods=["GET","POST"])
 def index():
@@ -35,27 +40,40 @@ def index():
 
 @app.route("/users", methods=["GET","POST"])
 def users():
-  ####################
-  # For adding a new person into our database
-  ####################
-  cell_phone = request.form.get("cell_phone", None)
-  name = request.form.get("name", None)
-  
-  user_entry = {
-  "name": name,
-  "cell_phone": cell_phone
-  }
+  date = datetime.datetime.utcnow()
+  date = date + datetime.timedelta(hours=3)
+  date = date.strftime("%a %I:%M%p %d %B %Y")
+  ethiopia_info["time_string"] = date
 
-  # only add if all the fields are filled out
-  if name != None:
-    add_user(user_entry)
+  if request.method == "POST":
+    ####################
+    # For adding a new person into our database
+    ####################
+    cell_phone = request.form.get("cell_phone", None)
+    name = request.form.get("name", None)
+    input_region = request.form.get("regions", None)
+    input_village = request.form.get("villages", None)
 
-  # Get all of the current users, updated from the database
+    if not cell_phone.startswith("251"):
+      cell_phone = "1" + str(cell_phone)
+    
+    user_entry = {
+    "name": name,
+    "cell_phone": cell_phone,
+    "region": input_region,
+    "village": input_village
+    }
+
+    # only add if all the fields are filled out
+    if cell_phone != None:
+      add_user(user_entry)
+
+    # Get all of the current users, updated from the database
   user_list = get_all_users()
   call_list = get_call_logs()
-    
 
-  return render_template("users.html", user_list=user_list, call_list=call_list)
+  return render_template("users.html", user_list=user_list, call_list=call_list, ethiopia_info=ethiopia_info)
+
 
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
@@ -81,9 +99,9 @@ def send_call_route():
     return redirect(url_for('users'))
 
 def send_to_list(database_users):
-
   for user_entry in database_users:
-    send_call(user_entry['cell_phone'])
+    call_id = send_call(user_entry['cell_phone'])
+    add_call_to_db(user_entry['id'], call_id)
 
 @app.route("/get_csv", methods=["POST"])
 def foo():
