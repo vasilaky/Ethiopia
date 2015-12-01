@@ -1,78 +1,79 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, g, url_for
-#from config import *
+from flask import render_template, request, redirect, url_for
 from twilio.rest import TwilioRestClient
 from config import *
 from database_helper import *
 from twilio_helper import *
 import datetime
-import requests, json
 
 user_list = None
 call_list = None
 ethiopia_info = {
-  "regions": ["Afar", "Amhara"],
-  "villages": []
+    "regions": ["Afar", "Amhara"],
+    "villages": []
 }
 
-@app.route("/", methods=["GET","POST"])
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-  if request.method == "POST":
+    if request.method == "POST":
 
-    # If they click the button to send a text message
-    cell_number = request.form.get("cell_phone", None)
-    text_message = request.form.get("text_message", None)
+        # If they click the button to send a text message
+        cell_number = request.form.get("cell_phone", None)
 
-    client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
-    call = client.calls.create(
-      to=cell_number, 
-      from_=FROM_NUMBER, 
-      url="http://ethiopia-sms.herokuapp.com",  
-      method="GET",  
-      fallback_method="GET",  
-      status_callback_method="GET",    
-      record="false"
-    ) 
-     
-    print call.sid
+        client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
+        call = client.calls.create(
+            to=cell_number,
+            from_=FROM_NUMBER,
+            url="http://ethiopia-sms.herokuapp.com",
+            method="GET",
+            fallback_method="GET",
+            status_callback_method="GET",
+            record="false"
+        )
 
-  return render_template("index.html")
+        print call.sid
 
-@app.route("/users", methods=["GET","POST"])
+    return render_template("index.html")
+
+
+@app.route("/users", methods=["GET", "POST"])
 def users():
-  date = datetime.datetime.utcnow()
-  date = date + datetime.timedelta(hours=3)
-  date = date.strftime("%a %I:%M%p %d %B %Y")
-  ethiopia_info["time_string"] = date
+    date = datetime.datetime.utcnow()
+    date = date + datetime.timedelta(hours=3)
+    date = date.strftime("%a %I:%M%p %d %B %Y")
+    ethiopia_info["time_string"] = date
 
-  if request.method == "POST":
-    ####################
-    # For adding a new person into our database
-    ####################
-    cell_phone = request.form.get("cell_phone", None)
-    name = request.form.get("name", None)
-    input_region = request.form.get("regions", None)
-    input_village = request.form.get("villages", None)
+    if request.method == "POST":
+        ####################
+        # For adding a new person into our database
+        ####################
+        cell_phone = request.form.get("cell_phone", None)
+        name = request.form.get("name", None)
+        input_region = request.form.get("regions", None)
+        input_village = request.form.get("villages", None)
 
-    if not cell_phone.startswith("251"):
-      cell_phone = "1" + str(cell_phone)
-    
-    user_entry = {
-    "name": name,
-    "cell_phone": cell_phone,
-    "region": input_region,
-    "village": input_village
-    }
+        if not cell_phone.startswith("251"):
+            cell_phone = "1" + str(cell_phone)
 
-    # only add if all the fields are filled out
-    if cell_phone != None:
-      add_user(user_entry)
+        user_entry = {
+            "name": name,
+            "cell_phone": cell_phone,
+            "region": input_region,
+            "village": input_village
+        }
+
+        # only add if all the fields are filled out
+        if cell_phone:
+            add_user(user_entry)
 
     # Get all of the current users, updated from the database
-  user_list = get_all_users()
-  call_list = get_call_logs()
+    user_list = get_all_users()
+    call_list = get_call_logs()
 
-  return render_template("users.html", user_list=user_list, call_list=call_list, ethiopia_info=ethiopia_info)
+    return render_template(
+        "users.html", user_list=user_list, call_list=call_list,
+        ethiopia_info=ethiopia_info)
 
 
 @app.route("/send_call_route", methods=["POST", "GET"])
@@ -88,27 +89,33 @@ def send_call_route():
     send_to_list(get_user_info_from_id_list(to_send))
     users = get_user_info_from_id_list(to_delete)
     for user in users:
-      delete_user(user)
+        delete_user(user)
 
-    #Check Status of call
-
-    # Get all of the current users, updated from the database
+    '''
+    Get all of the current users, updated from the database
     user_list = get_all_users()
     call_list = get_call_logs()
+    '''
+
+    # Check Status of call
 
     return redirect(url_for('users'))
 
+
 def send_to_list(database_users):
-  for user_entry in database_users:
-    call_id = send_call(user_entry['cell_phone'])
-    add_call_to_db(user_entry['id'], call_id)
+    # TWO Important functions: Adds call to db & sends call
+    for user_entry in database_users:
+        call_id = send_call(user_entry['cell_phone'])
+        add_call_to_db(user_entry['id'], call_id)
+
 
 @app.route("/get_csv", methods=["POST"])
 def foo():
-  page = get_logs_csv()
-  return redirect(page)
+    page = get_logs_csv()
+    return redirect(page)
+
 
 @app.route("/calls", methods=["GET", "POST"])
 def calls():
-  call_list = get_call_logs()
-  return render_template("calls.html", call_list=call_list)
+    call_list = get_call_logs()
+    return render_template("calls.html", call_list=call_list)

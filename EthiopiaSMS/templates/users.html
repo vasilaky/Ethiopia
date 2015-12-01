@@ -20,7 +20,8 @@
             <div class="form-group">
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
-            <button id="user_add" type="submit" class="btn btn-default">Add User</button>
+            <br>
+
             <input class="form-control" type="text" name="regions" list="namesregion" placeholder="Region Name">
             <datalist id="namesregion">
             {% for region in ethiopia_info.regions %}
@@ -34,8 +35,10 @@
               <option>{{village}}</option>
             {% endfor %}
           </datalist>
+
+          <br><button id="user_add" type="submit" class="btn btn-default">Add User</button>
           </form>
-          
+
 
         </div>
 
@@ -49,7 +52,7 @@
         <th> Cell Phone </th>
         <th> Send them a Message? </th>
         <th> Delete User? </th>
-        <th> Times Called </th>
+        <th> Times Called (since adding to db) </th>
       </tr>
       <form method="post" action="send_call_route">
       {% if user_list %}
