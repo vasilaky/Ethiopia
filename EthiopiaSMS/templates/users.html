@@ -50,6 +50,8 @@
         <th> Id </th>
         <th> Name </th>
         <th> Cell Phone </th>
+        <th> Region </th>
+        <th> Village </th>
         <th> Send them a Message? </th>
         <th> Delete User? </th>
         <th> Times Called (since adding to db) </th>
@@ -61,6 +63,8 @@
           <td>{{user.id}}</td>
           <td>{{user.name}}</td>
           <td>{{user.cell_phone}}</td>
+          <td>{{user.region}}</td>
+          <td>{{user.village}}</td>
           <td><input name="send" value="{{user.id}}" type="checkbox"></td>
           <td><input name="delete" value="{{user.id}}" type="checkbox"></td>
           {% if user.calls %}
@@ -73,7 +77,8 @@
       {% endif %}
     </table>
     <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
-    </form><p>
+    </form>
+    <p>
     <div style="display:none" id="call_sent" class="col-md-offset-10">Success!</div></p>
   </div>
 

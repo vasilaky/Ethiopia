@@ -66,17 +66,20 @@ def get_user_info_from_id_list(id_list):
 def add_call_to_db(user_id, call_info):
     with connect(DATABASE_URL) as conn:
         with dict_cursor(conn) as db:
-            q_call_array = ('SELECT calls FROM USERS'
-                            'WHERE id = {}').format(user_id)
+            q_call_array = ('''SELECT calls FROM USERS
+                             WHERE id = {}''').format(user_id)
             db.execute(q_call_array)
             result = db.fetchone()
             if result['calls'] is None:
-                q = ('UPDATE USERS SET CALLS = ARRAY[\'{call_info}\']'
-                     'WHERE id={user_id}').format(call_info=call_info,
-                                                  user_id=user_id)
+                q = ('''UPDATE USERS SET CALLS = ARRAY[\'{call_info}\']
+                      WHERE id={user_id}''').format(call_info=call_info,
+                                                    user_id=user_id)
+                print q
             else:
-                q = ('UPDATE USERS SET CALLS = array_append(ARRAY{}, \'{}\')'
-                     'WHERE id={}').format(result['calls'], call_info, user_id)
+                q = ('''UPDATE USERS SET CALLS = array_append(ARRAY{}, \'{}\')
+                      WHERE id={}''').format(result['calls'],
+                                             call_info, user_id)
+                print q
             db.execute(q)
 
 # Check for Region in database so we can call by reg
