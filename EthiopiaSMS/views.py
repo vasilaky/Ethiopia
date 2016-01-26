@@ -14,8 +14,8 @@ ethiopia_info = {
     "regions": ["Afar", "Amhara"],
     "villages": []
 }
-app.config['BASIC_AUTH_USERNAME'] = 'eunice'
-app.config['BASIC_AUTH_PASSWORD'] = '2016E'
+app.config['BASIC_AUTH_USERNAME'] = USERNAME
+app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
 basic_auth = BasicAuth(app)
 
