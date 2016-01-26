@@ -1,6 +1,8 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, send_from_directory
+from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
+import subprocess
 from config import *
 from database_helper import *
 from twilio_helper import *
@@ -12,6 +14,15 @@ ethiopia_info = {
     "regions": ["Afar", "Amhara"],
     "villages": []
 }
+app.config['BASIC_AUTH_USERNAME'] = 'eunice'
+app.config['BASIC_AUTH_PASSWORD'] = '2016E'
+
+basic_auth = BasicAuth(app)
+
+# @app.route('/secret')
+# @basic_auth.required
+# def secret_view():
+#     return render_template('secret.html')
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -38,6 +49,7 @@ def index():
 
 
 @app.route("/users", methods=["GET", "POST"])
+@basic_auth.required
 def users():
     date = datetime.datetime.utcnow()
     date = date + datetime.timedelta(hours=3)
@@ -119,3 +131,11 @@ def foo():
 def calls():
     call_list = get_call_logs()
     return render_template("calls.html", call_list=call_list)
+
+@app.route("/send_text", methods=["GET", "POST"])
+def send_text():
+  return render_template("messages.html")
+
+@app.route("/scripts/<path:path>", methods=["GET","POST"])
+def work(path):
+  return send_from_directory('scripts', path)

@@ -1,3 +1,4 @@
+Flask-BasicAuth
 Flask==0.10.1
 twilio==4.6.0
 Jinja2==2.8
