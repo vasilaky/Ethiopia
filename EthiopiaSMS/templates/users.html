@@ -14,32 +14,33 @@
           <p id="success_text" style="display: none"> Success! </p>
           <form class="form-inline" name="new_user" action="/users" method="post">
             <div class="form-group input-group">
-              <span class="input-group-addon">+</span>
+              Phone Number:<br>
               <input minlength="10" class="form-control" name="cell_phone" type="text" placeholder="Phone Number" class="form-control">
             </div>
+            <br><br>
             <div class="form-group">
+              Name: <br>
               <input class="form-control" name="name" type="text" placeholder="Enter Name" class="form-control">
             </div>
-            <br>
-
+            <br><br>
+            Regions: <br>
             <input class="form-control" type="text" name="regions" list="namesregion" placeholder="Region Name">
             <datalist id="namesregion">
             {% for region in ethiopia_info.regions %}
               <option>{{region}}</option>
             {% endfor %}
           </datalist>
-
+          <br><br>
+          Villages: <br>
           <input class="form-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
             <datalist id="namesvillage">
             {% for village in ethiopia_info.village %}
               <option>{{village}}</option>
             {% endfor %}
           </datalist>
-
+          <br>
           <br><button id="user_add" type="submit" class="btn btn-default">Add User</button>
           </form>
-
-
         </div>
 
     <div class="col-md-5">
@@ -74,13 +75,14 @@
         {% endfor %}
       {% endif %}
     </table>
-    <input type="radio" name="options" id="option1" value="send"> Send Message </input><br>
-    <input type="radio" name="options" id="option2" value="delete"> Detele user </input><br>
-    <input type="radio" name="options" id="option3" value="another"> Another Option </input><br>
+    <p>What you would like to do with selected users?</p>
+    <label class="radio-inline"><input type="radio" name="options" value="voice">Send Voice Message</input></label>
+    <label class="radio-inline"><input type="radio" name="options" value="sms">Send SMS</input></label>
+    <label class="radio-inline"><input type="radio" name="options" value="delete">Detele user</input></label>
     <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
     </form>
     <p>
-    <div style="display:none" id="call_sent" class="col-md-offset-10">Success!</div></p>
+    <div style="display:none" id="call_sent" class="col-md-offset-10"> Success! </div></p>
   </div>
 
       </div>

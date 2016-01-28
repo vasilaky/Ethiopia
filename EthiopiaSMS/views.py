@@ -110,20 +110,19 @@ def users():
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
     
-    ####################
     # For doing actions to a list of people selected on our front end
-    ####################
     option = request.form["options"]
-    print(option)
     selected = request.form.getlist("select", None)
-    if (option == "send"):
+    if (option == "voice"):
         send_to_list(get_user_info_from_id_list(selected))
     elif (option == "delete"):
         users = get_user_info_from_id_list(selected)
         for user in users:
             delete_user(user)
+    elif (option == "sms"):
+        print("SMS functionality not implemented ATM.")
     else:
-        pint("Function not implemented.")
+        print("This should not be reached.")
 
     '''
     Get all of the current users, updated from the database
