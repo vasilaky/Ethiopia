@@ -8,7 +8,6 @@ from config import *
 def dict_cursor(conn, cursor_factory=extras.RealDictCursor):
     return conn.cursor(cursor_factory=cursor_factory)
 
-
 #
 # Adding a User
 #

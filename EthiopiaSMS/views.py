@@ -109,18 +109,21 @@ def users():
 
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
+    
     ####################
-    # For sending to a list of people selected on our front end
+    # For doing actions to a list of people selected on our front end
     ####################
-
-    # Get list of user IDs from the selected names
-    to_send = request.form.getlist("send", None)
-    # Searches from our DB for each user ID and sends to this list of IDs
-    to_delete = request.form.getlist("delete", None)
-    send_to_list(get_user_info_from_id_list(to_send))
-    users = get_user_info_from_id_list(to_delete)
-    for user in users:
-        delete_user(user)
+    option = request.form["options"]
+    print(option)
+    selected = request.form.getlist("select", None)
+    if (option == "send"):
+        send_to_list(get_user_info_from_id_list(selected))
+    elif (option == "delete"):
+        users = get_user_info_from_id_list(selected)
+        for user in users:
+            delete_user(user)
+    else:
+        pint("Function not implemented.")
 
     '''
     Get all of the current users, updated from the database

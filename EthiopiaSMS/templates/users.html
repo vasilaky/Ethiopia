@@ -47,26 +47,24 @@
     <h2> Users in Our System </h2>
     <p> The current time in Ethiopia is {{ethiopia_info.time_string}}</p>
       <tr>
+        <th> Select User </th>
         <th> Id </th>
         <th> Name </th>
         <th> Cell Phone </th>
         <th> Region </th>
         <th> Village </th>
-        <th> Send them a Message? </th>
-        <th> Delete User? </th>
         <th> Times Called (since adding to db) </th>
       </tr>
       <form method="post" action="send_call_route">
       {% if user_list %}
         {% for user in user_list %}
         <tr>
+          <td><input name="select" value="{{user.id}}" type="checkbox"></td>
           <td>{{user.id}}</td>
           <td>{{user.name}}</td>
           <td>{{user.cell_phone}}</td>
           <td>{{user.region}}</td>
           <td>{{user.village}}</td>
-          <td><input name="send" value="{{user.id}}" type="checkbox"></td>
-          <td><input name="delete" value="{{user.id}}" type="checkbox"></td>
           {% if user.calls %}
             <td> <a id="{{user.calls[0]}}" class="highlighter" href="/calls#{{user.calls[0]}}">{{user.calls|length}}</a></td>
           {% else %}
@@ -76,6 +74,9 @@
         {% endfor %}
       {% endif %}
     </table>
+    <input type="radio" name="options" id="option1" value="send"> Send Message </input><br>
+    <input type="radio" name="options" id="option2" value="delete"> Detele user </input><br>
+    <input type="radio" name="options" id="option3" value="another"> Another Option </input><br>
     <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
     </form>
     <p>
