@@ -1,5 +1,6 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, url_for, send_from_directory
+from flask import render_template, request, redirect, url_for
+from werkzeug import secure_filename
 from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
 import subprocess
@@ -17,6 +18,10 @@ ethiopia_info = {
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 basic_auth = BasicAuth(app)
 
 # @app.route('/secret')
@@ -24,6 +29,8 @@ basic_auth = BasicAuth(app)
 # def secret_view():
 #     return render_template('secret.html')
 
+def allowed_file(filename):
+    return '.' in filename
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -47,6 +54,18 @@ def index():
 
     return render_template("index.html")
 
+@app.route("/record_message", methods =["GET", "POST"])
+def record():
+  listofsounds = []
+  if request.method == "POST":
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+      filename = secure_filename(file.filename)
+      print os.path
+      file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+      return redirect(url_for('uploaded_file',
+                              filename=filename))
+  return render_template("record.html", listofsounds=listofsounds)
 
 @app.route("/users", methods=["GET", "POST"])
 @basic_auth.required
