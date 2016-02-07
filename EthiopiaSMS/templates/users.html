@@ -10,7 +10,8 @@
 
 
     <div class="col-md-5 col-sm-offset-1">
-          <h2> Add a new user </h2>
+          <h1> Add a new user </h1>
+          <br>
           <p id="success_text" style="display: none"> Success! </p>
           <form class="form-inline" name="new_user" action="/users" method="post">
             <div class="form-group input-group">
@@ -32,7 +33,7 @@
           </datalist>
           <br><br>
           Villages: <br>
-          <input class="form-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
+          <input class="tform-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
             <datalist id="namesvillage">
             {% for village in ethiopia_info.village %}
               <option>{{village}}</option>
@@ -45,11 +46,12 @@
 
     <div class="col-md-5">
     <table class="table table-hover table-bordered table-striped">
-    <h2> Users in Our System </h2>
+    <h1> Users in Our Current System </h1>
+    <br>
     <p> The current time in Ethiopia is {{ethiopia_info.time_string}}</p>
       <tr>
         <th> Select User </th>
-        <th> Id </th>
+        <!-- <th> Id </th> -->
         <th> Name </th>
         <th> Cell Phone </th>
         <th> Region </th>
@@ -61,7 +63,7 @@
         {% for user in user_list %}
         <tr>
           <td><input name="select" value="{{user.id}}" type="checkbox"></td>
-          <td>{{user.id}}</td>
+          <!-- <td>{{user.id}}</td> -->
           <td>{{user.name}}</td>
           <td>{{user.cell_phone}}</td>
           <td>{{user.region}}</td>
