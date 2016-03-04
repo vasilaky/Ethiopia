@@ -184,7 +184,7 @@ def calls():
     call_list = get_call_logs()
     return render_template("calls.html", call_list=call_list)
 
-@app.route("/smssych", methods=["GET", "POST"])
+@app.route("/smssynch", methods=["GET", "POST"])
 def synch():
     task = request.args.get('task')
     if request.method == 'POST':
