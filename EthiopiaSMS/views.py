@@ -187,7 +187,8 @@ def calls():
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
     task = request.args.get('task')
-    ts = datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
+    # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
+    ts = 'uniquesym'
     print task
     if task == 'send':
       return '''{
