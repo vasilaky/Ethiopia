@@ -189,10 +189,10 @@ def synch():
     task = request.args.get('task')
     if request.method == 'POST':
       print task
-      return task
+      return "{}"
     else:
       print task
-      return task
+      return "{}"
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():

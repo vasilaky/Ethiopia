@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say>Hello Curious George</Say>
+    <Play>http://ethiopia-sms.herokuapp.com/static/testsound.m4a</Play>
+</Response>
