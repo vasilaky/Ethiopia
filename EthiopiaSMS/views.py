@@ -191,8 +191,7 @@ def synch():
     ts = 'uniquesym'
     print task
     if task == 'send':
-      return '''{
-                "payload": {
+      return '''{"payload": {
                   "success": "true",
                   "error": null,
                   "secret": "bschool",
@@ -201,8 +200,7 @@ def synch():
                 }
                 }'''
     else:
-      return '''{
-                "payload": {
+      return '''{"payload": {
                   "success": "true",
                   "error": null,
                   "secret": "bschool",
