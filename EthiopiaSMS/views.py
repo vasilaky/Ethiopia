@@ -187,16 +187,34 @@ def calls():
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
     task = request.args.get('task')
+    ts = datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     print task
-    return '''{"payload": {
-        "success": "true",
-        "error": null,
-        "secret": "secret02",
-        "task": "send",
-        "messages": [
-        ]
-    }
-}'''
+    if task == 'send':
+      return '''{
+                "payload": {
+                  "success": "true",
+                  "error": null,
+                  "secret": "bschool",
+                  "task": "send",
+                  "messages": []
+                }
+                }'''
+    else:
+      return '''{
+                "payload": {
+                  "success": "true",
+                  "error": null,
+                  "secret": "bschool",
+                  "task": "send",
+                  "messages": [{
+                    "to": "' . {}. '",
+                    "message": "Si, claro! ' . {}} . ".\n" . {} . "\n" . hostname . '",
+                    "uuid": "' . {} . '"
+                }
+                  ]
+                }
+                }'''.format(TO_NUMBER, 'hello world', ts, ts)
+
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
