@@ -188,7 +188,7 @@ def calls():
 def synch():
     task = request.args.get('task')
     print task
-      return '''{"payload": {
+    return '''{"payload": {
         "success": "true",
         "error": null,
         "secret": "secret02",
