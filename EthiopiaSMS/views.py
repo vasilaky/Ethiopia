@@ -8,6 +8,7 @@ from config import *
 from database_helper import *
 from twilio_helper import *
 import datetime
+import json
 
 user_list = None
 call_list = None
@@ -196,11 +197,9 @@ def synch():
                   "error": null,
                   "secret": "bschool",
                   "task": "send",
-                  "messages": []
-                }
-                }'''
+                  "messages": []}}'''
     else:
-      return '''{"payload": {
+      response = '''{"payload": {
                   "success": "true",
                   "error": null,
                   "secret": "bschool",
@@ -213,6 +212,8 @@ def synch():
                   ]
                 }
                 }'''.format(TO_NUMBER, 'hello world', ts, ts)
+
+      return json.dumps(response)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
