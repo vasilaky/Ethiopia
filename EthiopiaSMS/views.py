@@ -187,12 +187,16 @@ def calls():
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
     task = request.args.get('task')
-    if request.method == 'POST':
-      print task
-      return "{}"
-    else:
-      print task
-      return "{}"
+    print task
+      return '''{"payload": {
+        "success": "true",
+        "error": null,
+        "secret": "secret02",
+        "task": "send",
+        "messages": [
+        ]
+    }
+}'''
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
