@@ -199,21 +199,19 @@ def synch():
                   "task": "send",
                   "messages": []}}'''
     else:
-      response = '''{"payload": {
+      return '''{"payload": {
                   "success": "true",
                   "error": null,
                   "secret": "bschool",
                   "task": "send",
                   "messages": [{
-                    "to": "' . {}. '",
-                    "message": "Si, claro! ' . {}} . ".\n" . {} . "\n" . hostname . '",
-                    "uuid": "' . {} . '"
-                }
-                  ]
-                }
-                }'''.format(TO_NUMBER, 'hello world', ts, ts)
+                    "to": "+714-907-5336",
+                    "message": "Si, claro! ",
+                    "uuid": "29307839"}]
+                  }
+                  }'''
 
-      return json.dumps(response)
+      # return json.dumps(response)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
