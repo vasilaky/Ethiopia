@@ -127,7 +127,7 @@ def users():
             add_user(user_entry)
         else:
             # did not fill all required fields
-            print("counld not add user.") 
+            print("counld not add user.")
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -140,7 +140,7 @@ def users():
 
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
-    
+
     # For doing actions to a list of people selected on our front end
     option = request.form["options"]
     selected = request.form.getlist("select", None)
@@ -183,6 +183,16 @@ def foo():
 def calls():
     call_list = get_call_logs()
     return render_template("calls.html", call_list=call_list)
+
+@app.route("/smssych", methods=["GET", "POST"])
+def synch():
+    task = request.args.get('task')
+    if request.method == 'POST':
+      print task
+      return task
+    else:
+      print task
+      return task
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
