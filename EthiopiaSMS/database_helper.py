@@ -1,7 +1,6 @@
 from psycopg2 import connect, extras
 from config import *
 
-
 #
 # Setup for DB
 #

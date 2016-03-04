@@ -67,6 +67,26 @@ def record():
                               filename=filename))
   return render_template("record.html", listofsounds=listofsounds)
 
+
+def check_user(user_entry):
+    # simple check on user info
+    if user_entry["name"] == None or user_entry["cell_phone"] == None or \
+    user_entry["region"] == None or user_entry["village"] == None:
+        return False
+    for name_part in user_entry["name"].split(" "):
+        if not name_part.isalpha():
+            return False
+    if not user_entry["cell_phone"].isnumeric():
+        return False
+    for region_part in user_entry["region"].split(" "):
+        if not region_part.isalpha():
+            return False
+    for village_part in user_entry["village"].split(" "):
+        if not village_part.isalpha():
+            return False
+    return True
+
+
 @app.route("/users", methods=["GET", "POST"])
 @basic_auth.required
 def users():
@@ -84,9 +104,6 @@ def users():
         input_region = request.form.get("regions", None)
         input_village = request.form.get("villages", None)
 
-        if not cell_phone.startswith("251"):
-            cell_phone = "1" + str(cell_phone)
-
         user_entry = {
             "name": name,
             "cell_phone": cell_phone,
@@ -94,9 +111,23 @@ def users():
             "village": input_village
         }
 
-        # only add if all the fields are filled out
-        if cell_phone:
+        # only add if passed checking
+        if check_user(user_entry):
+            # add region number to phone number
+            if user_entry["region"] == "United States":
+                if not user_entry["cell_phone"].startswith("1"):
+                    user_entry["cell_phone"] = "1" + str(user_entry["cell_phone"])
+            elif user_entry["region"] == "Ethiopia":
+                if not user_entry["cell_phone"].startswith("251"):
+                    user_entry["cell_phone"] = "251" + str(user_entry["cell_phone"])
+            else:
+                print("Not supported")
+
+            # add user to db
             add_user(user_entry)
+        else:
+            # did not fill all required fields
+            print("counld not add user.") 
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -110,20 +141,19 @@ def users():
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
     
-    ####################
     # For doing actions to a list of people selected on our front end
-    ####################
     option = request.form["options"]
-    print(option)
     selected = request.form.getlist("select", None)
-    if (option == "send"):
+    if (option == "voice"):
         send_to_list(get_user_info_from_id_list(selected))
     elif (option == "delete"):
         users = get_user_info_from_id_list(selected)
         for user in users:
             delete_user(user)
+    elif (option == "sms"):
+        print("SMS functionality not implemented ATM.")
     else:
-        pint("Function not implemented.")
+        print("This should not be reached.")
 
     '''
     Get all of the current users, updated from the database
