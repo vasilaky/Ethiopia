@@ -192,8 +192,9 @@ def synch():
     task = request.args.get('task')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
-    print task # to check if our output is a send
     if task == 'send':
+      print task
+      print request.get_json()
       return '''{"payload": {
                   "success": "true",
                   "error": null,
@@ -201,9 +202,13 @@ def synch():
                   "task": "send",
                   "messages": []}}'''
     if task == 'sent':
+      print task
+      print request.get_json()
       messages = request.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
+      print task
+      print request.get_json()
       return '''{"payload": {
                   "success": "true",
                   "error": null,
