@@ -192,7 +192,7 @@ def synch():
       task = request.args.get('task')
       # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
       ts = 'uniquesym'
-      print task
+      print task # to check if our output is a send
       if task == 'send':
         return '''{"payload": {
                     "success": "true",
@@ -213,7 +213,7 @@ def synch():
                     }
                     }'''
 
-    time.sleep(5)
+      time.sleep(5)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
