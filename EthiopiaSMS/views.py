@@ -9,6 +9,7 @@ from database_helper import *
 from twilio_helper import *
 import datetime
 import json
+import time
 
 user_list = None
 call_list = None
@@ -187,31 +188,32 @@ def calls():
 
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
-    task = request.args.get('task')
-    # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
-    ts = 'uniquesym'
-    print task
-    if task == 'send':
-      return '''{"payload": {
-                  "success": "true",
-                  "error": null,
-                  "secret": "bschool",
-                  "task": "send",
-                  "messages": []}}'''
-    else:
-      return '''{"payload": {
-                  "success": "true",
-                  "error": null,
-                  "secret": "bschool",
-                  "task": "send",
-                  "messages": [{
-                    "to": "+714-907-5336",
-                    "message": "Si, claro! ",
-                    "uuid": "29307839"}]
-                  }
-                  }'''
+    while True:
+      task = request.args.get('task')
+      # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
+      ts = 'uniquesym'
+      print task
+      if task == 'send':
+        return '''{"payload": {
+                    "success": "true",
+                    "error": null,
+                    "secret": "bschool",
+                    "task": "send",
+                    "messages": []}}'''
+      else:
+        return '''{"payload": {
+                    "success": "true",
+                    "error": null,
+                    "secret": "bschool",
+                    "task": "send",
+                    "messages": [{
+                      "to": "+17149075336",
+                      "message": "Si, claro! ",
+                      "uuid": "29307839"}]
+                    }
+                    }'''
 
-      # return json.dumps(response)
+    time.sleep(5)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
