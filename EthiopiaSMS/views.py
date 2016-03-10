@@ -190,7 +190,6 @@ def calls():
 def synch():
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
-    messages = request.get('queued_messages')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
     print task # to check if our output is a send
@@ -202,6 +201,7 @@ def synch():
                   "task": "send",
                   "messages": []}}'''
     if task == 'sent':
+      messages = request.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
       return '''{"payload": {
