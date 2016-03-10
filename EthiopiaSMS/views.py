@@ -191,6 +191,7 @@ def synch():
     while True:
       # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
       task = request.args.get('task')
+      print request.args
       # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
       ts = 'uniquesym'
       print task # to check if our output is a send
@@ -213,6 +214,7 @@ def synch():
                     "uuid": "29307839"}]
                   }
                   }'''
+
 
       time.sleep(5)
 
