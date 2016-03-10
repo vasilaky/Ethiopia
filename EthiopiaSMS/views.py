@@ -188,32 +188,33 @@ def calls():
 
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
-
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
-    print request.get_json()
+    messages = request.get('queued_messages')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
     print task # to check if our output is a send
-    # if task == 'send':
-    #   return '''{"payload": {
-    #               "success": "true",
-    #               "error": null,
-    #               "secret": "bschool",
-    #               "task": "send",
-    #               "messages": []}}'''
-    # else:
-    return '''{"payload": {
-                "success": "true",
-                "error": null,
-                "secret": "bschool",
-                "task": "send",
-                "messages": [{
-                  "to": "+17149075336",
-                  "message": "Si, claro! ",
-                  "uuid": "29307839"}]
-                }
-                }'''
+    if task == 'send':
+      return '''{"payload": {
+                  "success": "true",
+                  "error": null,
+                  "secret": "bschool",
+                  "task": "send",
+                  "messages": []}}'''
+    if task == 'sent':
+      return '''{"message_uuids" : {}}'''.format(messages)
+    else:
+      return '''{"payload": {
+                  "success": "true",
+                  "error": null,
+                  "secret": "bschool",
+                  "task": "send",
+                  "messages": [{
+                    "to": "+17149075336",
+                    "message": "Si, claro! ",
+                    "uuid": "29307839"}]
+                  }
+                  }'''
 
 
 @app.route("/send_text", methods=["GET", "POST"])
