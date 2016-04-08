@@ -220,7 +220,7 @@ def synch():
       print request.get_json()
       messages_response = request.get_json()
       messages = messages_response.get('queued_messages')
-      return '''{"message_uuids" : {}}'''.format(messages)
+      return '''{"message_uuids" : %s}''' % (messages)
     else:
       message = ethiopia_info.get('message')
       print "print other task (should send msg to phone)"
