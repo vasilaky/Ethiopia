@@ -193,6 +193,7 @@ def synch():
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
     # print request.get_json()
+    time.sleep(120)
     if task == 'send':
       print "send task"
       print task
