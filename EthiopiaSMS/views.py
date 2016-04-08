@@ -214,7 +214,7 @@ def synch():
       messages = request.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
-      message = ethiopia_info['message']
+      message = ethiopia_info.get('message')
       print "print other task (should send msg to phone)"
       print message
       print task
@@ -226,10 +226,10 @@ def synch():
                   "task": "send",
                   "messages": [{
                     "to": "+17149075336",
-                    "message": "{}",
+                    "message": "%s",
                     "uuid": "29307839"}]
                   }
-                  }'''.format(message)
+                  }''' % (message)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
