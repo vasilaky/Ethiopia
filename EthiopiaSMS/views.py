@@ -200,7 +200,7 @@ def synch():
     if task == 'send':
       print "send task"
       print task
-      print request.get_json()
+      # print request.get_json()
       message = ethiopia_info.get('message')
       print message
       return '''{"payload": {
@@ -218,14 +218,15 @@ def synch():
       print "sent task"
       print task
       print request.get_json()
-      messages = request.get('queued_messages')
+      messages_response = request.get_json()
+      messages = messages_response.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
       message = ethiopia_info.get('message')
       print "print other task (should send msg to phone)"
       print message
       print task
-      print request.get_json()
+      # print request.get_json()
       return '''{"payload": {
                   "success": "true",
                   "error": null,
