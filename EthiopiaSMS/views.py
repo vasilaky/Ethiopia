@@ -191,7 +191,6 @@ def calls():
 
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
-    message = ethiopia_info['message']
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
@@ -215,7 +214,9 @@ def synch():
       messages = request.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
+      message = ethiopia_info['message']
       print "print other task (should send msg to phone)"
+      print message
       print task
       print request.get_json()
       return '''{"payload": {
