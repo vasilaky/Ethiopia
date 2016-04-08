@@ -15,7 +15,8 @@ user_list = None
 call_list = None
 ethiopia_info = {
     "regions": ["Afar", "Amhara"],
-    "villages": []
+    "villages": [],
+    "message": ""
 }
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
@@ -153,7 +154,9 @@ def send_call_route():
         for user in users:
             delete_user(user)
     elif (option == "sms"):
-        print("SMS functionality not implemented ATM.")
+        sms_text = request.form["question"]
+        ethiopia_info['message'] = sms_text
+        print sms_text
     else:
         print("This should not be reached.")
 
@@ -188,12 +191,13 @@ def calls():
 
 @app.route("/smssynch", methods=["GET", "POST"])
 def synch():
+    message = ethiopia_info['message']
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
     # print request.get_json()
-    time.sleep(300)
+    # time.sleep(300)
     if task == 'send':
       print "send task"
       print task
@@ -221,10 +225,10 @@ def synch():
                   "task": "send",
                   "messages": [{
                     "to": "+17149075336",
-                    "message": "Si, claro! ",
+                    "message": "{}",
                     "uuid": "29307839"}]
                   }
-                  }'''
+                  }'''.format(message)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
