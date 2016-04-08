@@ -232,7 +232,12 @@ def synch():
                   "error": null,
                   "secret": "bschool",
                   "task": "send",
-                  "messages": []}}'''
+                  "messages": [{
+                    "to": "+17149075336",
+                    "message": "hello world",
+                    "uuid": "%s"}]
+                  }
+                }''' % (str(ts))
 
 
 @app.route("/send_text", methods=["GET", "POST"])
