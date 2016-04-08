@@ -201,12 +201,19 @@ def synch():
       print "send task"
       print task
       print request.get_json()
+      message = ethiopia_info.get('message')
+      print message
       return '''{"payload": {
                   "success": "true",
                   "error": null,
                   "secret": "bschool",
                   "task": "send",
-                  "messages": []}}'''
+                  "messages": [{
+                    "to": "+17149075336",
+                    "message": "%s",
+                    "uuid": "29307839"}]
+                  }
+                  }''' % (message)
     if task == 'sent':
       print "sent task"
       print task
@@ -224,12 +231,7 @@ def synch():
                   "error": null,
                   "secret": "bschool",
                   "task": "send",
-                  "messages": [{
-                    "to": "+17149075336",
-                    "message": "%s",
-                    "uuid": "29307839"}]
-                  }
-                  }''' % (message)
+                  "messages": []}}'''
 
 
 @app.route("/send_text", methods=["GET", "POST"])
@@ -239,3 +241,9 @@ def send_text():
 @app.route("/scripts/<path:path>", methods=["GET","POST"])
 def work(path):
   return send_from_directory('scripts', path)
+
+@app.route("/twiml")
+def sounds():
+  return '''<?xml version="1.0" encoding="UTF-8"?>
+<Response><Play>http://com.twilio.music.ambient.s3.amazonaws.com/aerosolspray_-_Living_Taciturn.mp3</Play><Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Plains.mp3</Play><Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Exurb.mp3</Play><Redirect/></Response>'''
+

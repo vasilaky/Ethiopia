@@ -8,7 +8,7 @@ client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 def send_call(to_number):
     # fallback_url = ("http://twimlets.com/holdmusic"
     #                 "?Bucket=com.twilio.music.ambient")
-    # fallback_url = "http://ethiopia-sms.herokuapp.com/static/testsound.m4a"
+    # fallback_url = "http://ethiopia-sms.herokuapp.com/twiml"
     fallback_url = "http://twimlbin.com/cb5632dafed6a4f5319961050a089deb/raw"
 
     call = client.calls.create(
