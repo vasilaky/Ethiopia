@@ -90,7 +90,7 @@ def check_user(user_entry):
 
 
 @app.route("/users", methods=["GET", "POST"])
-@basic_auth.required
+# @basic_auth.required
 def users():
     date = datetime.datetime.utcnow()
     date = date + datetime.timedelta(hours=3)
@@ -192,8 +192,9 @@ def synch():
     task = request.args.get('task')
     # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
     ts = 'uniquesym'
-    print request.get_json()
+    # print request.get_json()
     if task == 'send':
+      print "send task"
       print task
       print request.get_json()
       return '''{"payload": {
@@ -203,11 +204,13 @@ def synch():
                   "task": "send",
                   "messages": []}}'''
     if task == 'sent':
+      print "sent task"
       print task
       print request.get_json()
       messages = request.get('queued_messages')
       return '''{"message_uuids" : {}}'''.format(messages)
     else:
+      print "print other task (should send msg to phone)"
       print task
       print request.get_json()
       return '''{"payload": {
