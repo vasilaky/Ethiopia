@@ -193,7 +193,7 @@ def calls():
 def synch():
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
-    ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
+    ts = datetime.datetime.strftime('+%Y-%m-%d %H:%M:%S UTC')
     # ts = 'uniquesym'
     # print request.get_json()
     # time.sleep(300)
