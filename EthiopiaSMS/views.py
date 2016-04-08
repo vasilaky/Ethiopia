@@ -193,8 +193,8 @@ def calls():
 def synch():
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
-    # ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
-    ts = 'uniquesym'
+    ts = datetime.datetime.strf('+%Y-%m-%d %H:%M:%S UTC')
+    # ts = 'uniquesym'
     # print request.get_json()
     # time.sleep(300)
     if task == 'send':
@@ -211,9 +211,9 @@ def synch():
                   "messages": [{
                     "to": "+17149075336",
                     "message": "%s",
-                    "uuid": "29307839"}]
+                    "uuid": "%s"}]
                   }
-                  }''' % (message)
+                  }''' % (message, str(ts))
     if task == 'sent':
       print "sent task"
       print task
