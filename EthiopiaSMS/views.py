@@ -245,13 +245,13 @@ def return_xml():
   xml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say voice="woman" language="en-US">Hello Welcome to Ethiopia SMS!</Say>
-    <Gather action="/get_digits" timeout="5">
+    <Gather action="/getdigits" timeout="5">
         <Say>Did it rain yesterday? Press 1 for Yes. Press 0 for No</Say>
     </Gather>
 </Response>"""
   return Response(xml, mimetype='text/xml')
 
-@app.route("/get_digits", methods=["GET", "POST"])
+@app.route("/getdigits", methods=["GET", "POST"])
 def get_digits():
   digits = request.args.get('Digits')
   json = request.get_json()
@@ -268,7 +268,7 @@ def get_digits():
 def voice():
     response = twiml.Response()
     with response.gather(numDigits=1, action="/gather") as gather:
-        gather.say("Press 1 to indicate The Ramones are the best band ever.")
+        gather.say("Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
     return str(response)
 
 @app.route('/gather', methods=['POST'])
@@ -276,22 +276,13 @@ def gather():
     response = twiml.Response()
     digits = request.form['Digits']
     if digits == "1":
-        response.say("You are correct.  The Ramones are the best.")
+        response.say("Thank you for telling us it rained. Goodbye.")
     else:
-        response.say("You are wrong.  Never call me again.")
+        response.say("Thank you for telling us it did not rain. Goodbye.")
     return str(response)
 
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
   return render_template("messages.html")
-
-@app.route("/scripts/<path:path>", methods=["GET","POST"])
-def work(path):
-  return send_from_directory('scripts', path)
-
-@app.route("/twiml")
-def sounds():
-  return '''<?xml version="1.0" encoding="UTF-8"?>
-<Response><Play>http://com.twilio.music.ambient.s3.amazonaws.com/aerosolspray_-_Living_Taciturn.mp3</Play><Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Plains.mp3</Play><Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Exurb.mp3</Play><Redirect/></Response>'''
 
