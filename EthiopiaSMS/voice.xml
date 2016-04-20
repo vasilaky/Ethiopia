@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say>Hello Curious George</Say>
     <Play>http://ethiopia-sms.herokuapp.com/static/testsound.m4a</Play>
 </Response>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Play>http://com.twilio.music.ambient.s3.amazonaws.com/aerosolspray_-_Living_Taciturn.mp3</Play>
+  <Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Exurb.mp3</Play>
+  <Play>http://com.twilio.music.ambient.s3.amazonaws.com/gurdonark_-_Plains.mp3</Play>
+  <Redirect/></Response>
