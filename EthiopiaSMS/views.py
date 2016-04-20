@@ -175,7 +175,7 @@ def send_call_route():
 def send_to_list(database_users):
     # TWO Important functions: Adds call to db & sends call
     for user_entry in database_users:
-        call_id = send_call(user_entry['cell_phone'])
+        call_id = send_call(user_entry['cell_phone'], user_entry['id'])
         add_call_to_db(user_entry['id'], call_id)
 
 
@@ -266,20 +266,23 @@ def get_digits():
 
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
+    print "we are calling: {}".format(request.args.get('caller'))
     response = twiml.Response()
     with response.gather(numDigits=1, action="/gather") as gather:
-        gather.say("AH-mah-say-guh-NAH-loh Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
+        gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
+        # gather.say("AH-mah-say-guh-NAH-loh Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
     return str(response)
 
 @app.route('/gather', methods=['POST'])
 def gather():
     response = twiml.Response()
     digits = request.form['Digits']
+    # append digit to our db
     if digits == "1":
         with response.gather(numDigits=1, action="/gather") as gather:
           gather.say("Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not.")
     elif digits == "2":
-      response.say("hank you for telling us it did not rain. Goodbye. Dehina Huni")
+      response.say("Thank you for telling us it did not rain. Goodbye. Dehina Huni")
     else:
         response.say("Thank you for telling us it did not rain. Goodbye. Dehina Huni")
     return str(response)
