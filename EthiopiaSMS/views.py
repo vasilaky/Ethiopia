@@ -244,9 +244,11 @@ def return_xml():
   xml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say voice="woman" language="en-US">Hello Welcome to Ethiopia SMS!</Say>
-  <Play loop="5">https://api.twilio.com/cowbell.mp3</Play>
-    <Gather timeout="10" finishOnKey="*">
+    <Gather timeout="5" finishOnKey="*">
         <Say>Did it rain yesterday? Press 1 for Yes. Press 0 for No</Say>
+    </Gather>
+    <Gather timeout="10" finishOnKey="*">
+        <Say>Did it rain last week? Press 1 for Yes. Press 0 for No</Say>
     </Gather>
 </Response>"""
   return Response(xml, mimetype='text/xml')
