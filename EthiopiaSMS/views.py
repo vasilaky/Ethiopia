@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, Response
 from werkzeug import secure_filename
 from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
+from twilio import twiml
 import subprocess
 from config import *
 from database_helper import *
@@ -246,7 +247,6 @@ def return_xml():
     <Say voice="woman" language="en-US">Hello Welcome to Ethiopia SMS!</Say>
     <Gather action="/get_digits" timeout="5">
         <Say>Did it rain yesterday? Press 1 for Yes. Press 0 for No</Say>
-        <Say>Did it rain last week? Press 1 for Yes. Press 0 for No</Say>
     </Gather>
 </Response>"""
   return Response(xml, mimetype='text/xml')
@@ -263,6 +263,24 @@ def get_digits():
     <Say voice="woman" language="en-US">You Entered {} For the Questions We asked</Say>
 </Response>""".format(digits)
   return Response(xml, mimetype='text/xml')
+
+@app.route('/voice', methods=['POST', 'GET'])
+def voice():
+    response = twiml.Response()
+    with response.gather(numDigits=1, action="/gather") as gather:
+        gather.say("Press 1 to indicate The Ramones are the best band ever.")
+    return str(response)
+
+@app.route('/gather', methods=['POST'])
+def gather():
+    response = twiml.Response()
+    digits = request.form['Digits']
+    if digits == "1":
+        response.say("You are correct.  The Ramones are the best.")
+    else:
+        response.say("You are wrong.  Never call me again.")
+    return str(response)
+
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
