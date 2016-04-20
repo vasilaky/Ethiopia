@@ -194,7 +194,8 @@ def calls():
 def synch():
     # http://ethiopia-sms.herokuapp.com/smssynch?task=send&secret=bschool
     task = request.args.get('task')
-    ts = datetime.datetime.strftime('+%Y-%m-%d %H:%M:%S UTC')
+    # ts = datetime.datetime.now().strftime('+%Y-%m-%d %H:%M:%S UTC')
+    ts = datetime.datetime.now()
     # ts = 'uniquesym'
     # print request.get_json()
     # time.sleep(300)
@@ -269,14 +270,15 @@ def voice():
     print "we are calling: {}".format(request.args.get('caller'))
     response = twiml.Response()
     with response.gather(numDigits=1, action="/gather") as gather:
-        gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
-        # gather.say("AH-mah-say-guh-NAH-loh Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
+        # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
+        gather.say("AH-mah-say-guh-NAH-loh Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
     return str(response)
 
 @app.route('/gather', methods=['POST'])
 def gather():
     response = twiml.Response()
     digits = request.form['Digits']
+    print digits
     # append digit to our db
     if digits == "1":
         with response.gather(numDigits=1, action="/gather") as gather:
