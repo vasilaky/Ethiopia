@@ -244,13 +244,24 @@ def return_xml():
   xml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say voice="woman" language="en-US">Hello Welcome to Ethiopia SMS!</Say>
-    <Gather timeout="5" finishOnKey="*">
+    <Gather action="/get_digits" timeout="5">
         <Say>Did it rain yesterday? Press 1 for Yes. Press 0 for No</Say>
-    </Gather>
-    <Gather timeout="10" finishOnKey="*">
         <Say>Did it rain last week? Press 1 for Yes. Press 0 for No</Say>
     </Gather>
 </Response>"""
+  return Response(xml, mimetype='text/xml')
+
+@app.route("/get_digits", methods=["GET", "POST"])
+def get_digits():
+  digits = request.args.get('Digits')
+  json = request.get_json()
+  print digits
+  print json
+
+  xml = """<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="woman" language="en-US">You Entered {} For the Questions We asked</Say>
+</Response>""".format(digits)
   return Response(xml, mimetype='text/xml')
 
 @app.route("/send_text", methods=["GET", "POST"])
