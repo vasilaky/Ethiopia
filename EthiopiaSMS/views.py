@@ -1,5 +1,5 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, Response
 from werkzeug import secure_filename
 from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
@@ -249,7 +249,7 @@ def return_xml():
         <Say>Did it rain yesterday? Press 1 for Yes. Press 0 for No</Say>
     </Gather>
 </Response>"""
-  return xml
+  return Response(xml, mimetype='text/xml')
 
 @app.route("/send_text", methods=["GET", "POST"])
 def send_text():
