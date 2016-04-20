@@ -271,7 +271,7 @@ def voice():
     response = twiml.Response()
     with response.gather(numDigits=1, action="/gather") as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
-        gather.say("AH-mah-say-guh-NAH-loh Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
+        gather.say("Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
     return str(response)
 
 @app.route('/gather', methods=['POST'])
@@ -284,7 +284,7 @@ def gather():
         with response.gather(numDigits=1, action="/gather") as gather:
           gather.say("Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not.")
     elif digits == "2":
-      response.say("Thank you for telling us it did not rain. Goodbye. Dehina Huni")
+      response.say("Thank you for telling us it did rain. Goodbye. Dehina Huni")
     else:
         response.say("Thank you for telling us it did not rain. Goodbye. Dehina Huni")
     return str(response)
