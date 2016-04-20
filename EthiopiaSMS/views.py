@@ -241,7 +241,7 @@ def synch():
 
 @app.route("/xml", methods=["GET", "POST"])
 def return_xml():
-  xml = """ <?xml version="1.0" encoding="UTF-8"?>
+  xml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say voice="woman" language="en-US">Hello Welcome to Ethiopia SMS!</Say>
   <Play loop="5">https://api.twilio.com/cowbell.mp3</Play>
