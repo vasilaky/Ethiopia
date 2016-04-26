@@ -314,12 +314,14 @@ def gather():
 def add_msg():
 
   if request.method == "POST":
-    question_info = {}
-    question_info['init'] = request.form.get('q1')
-    question_info['1'] = request.form.get('q2')
-    question_info['2'] = request.form.get('q3')
-    question_info['3'] = request.form.get('q4')
-    write_questions(question_info)
+    q_info = {}
+    q_info['init'] = request.form.get('q1')
+    q_info['1'] = request.form.get('q2')
+    q_info['2'] = request.form.get('q3')
+    q_info['3'] = request.form.get('q4')
+    write_questions(q_info)
+
+    global question_info
     question_info = get_questions()
     # if file and allowed_file(file.filename):
     #   filename = secure_filename(file.filename)
