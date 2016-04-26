@@ -11,6 +11,7 @@ from twilio_helper import *
 import datetime
 import json
 import time
+import io
 
 user_list = None
 call_list = None
@@ -19,10 +20,35 @@ ethiopia_info = {
     "villages": [],
     "message": ""
 }
-question_info = {"init": "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0.",
-"1": "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not.",
-"2": "Thank you for telling us it did rain. Goodbye.",
-"3":"Thank you for telling us it did not rain. Goodbye."}
+
+
+def write_questions(questions):
+  with open('questions.json') as f:
+    q_data = json.load(f)
+  if questions['init']:
+    q_data['init'] = questions['init']
+
+  if questions['1']:
+    q_data['1'] = questions['1']
+
+  if questions['2']:
+    q_data['2'] = questions['2']
+
+  if questions['3']:
+    q_data['3'] = questions['3']
+
+  with io.open('questions.json', 'w', encoding='utf-8') as f:
+    f.write(unicode(json.dumps(q_data, ensure_ascii=False)))
+
+
+def get_questions():
+  with open('questions.json') as f:
+    q_data = json.load(f)
+  return q_data
+
+
+question_info = get_questions()
+print question_info
 
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
@@ -237,6 +263,8 @@ def voice():
     question = request.args.get('question')
     response = twiml.Response()
     action = "/gather?caller={}&question={}".format(caller_info, question)
+    global question_info
+    question_info = get_questions()
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
@@ -287,11 +315,14 @@ def gather():
 def add_msg():
 
   if request.method == "POST":
-    global question_info
+    question_info = {}
     question_info['init'] = request.form.get('q1')
     question_info['1'] = request.form.get('q2')
     question_info['2'] = request.form.get('q3')
     question_info['3'] = request.form.get('q4')
+    write_questions(question_info)
+    global question_info
+    question_info = get_questions()
     # if file and allowed_file(file.filename):
     #   filename = secure_filename(file.filename)
     #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
