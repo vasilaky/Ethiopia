@@ -72,7 +72,7 @@ def add_call_to_db(user_id, call_id, question, answer, response):
             else:
               if answer == "None":
                 answer = 01234
-              question = str(question)
+              question = str(question).encode('utf8')
               print "ADDING CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
               q_call_array = '''INSERT INTO calls(user_id, call_id, question, answer, response)
                                 VALUES (%(user_id)s, %(call_id)s, %(question)s, %(answer)s, %(response)s)'''

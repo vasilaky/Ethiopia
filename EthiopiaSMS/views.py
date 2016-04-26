@@ -43,7 +43,7 @@ def write_questions(questions):
 
 def get_questions():
   with open(os.path.join(APP_STATIC,'questions.json')) as f:
-    q_data = json.load(f)
+    q_data = json.load(f).encode('utf8')
   return q_data
 
 
@@ -281,8 +281,6 @@ def gather():
 
     response = twiml.Response()
 
-    print question_info.get(question)
-    print digits
     add_call_to_db(caller_info, None, question_info.get(question), digits, True)
 
     if digits == "1":
