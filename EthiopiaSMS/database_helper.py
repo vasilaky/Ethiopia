@@ -61,7 +61,7 @@ def get_user_info_from_id_list(id_list):
 
 
 # Fetching Calls from the database
-def add_call_to_db(user_id, call_id, question, answer):
+def add_call_to_db(user_id, call_id, question, answer, response):
     with connect(DATABASE_URL) as conn:
         with dict_cursor(conn) as db:
             # if it is just the initial call, we'll insert that so we know we called someone
@@ -74,10 +74,9 @@ def add_call_to_db(user_id, call_id, question, answer):
                 answer = 01234
               question = str(question)
               print "ADDING CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
-              q_call_array = '''INSERT INTO calls(user_id, call_id, question, answer)
-                                VALUES (%(user_id)s, %(call_id)s, %(question)s, %(answer)s)'''
-              db.execute(q_call_array, {"user_id": user_id, "call_id": call_id, "question": question, "answer": answer})
-              print "ADDED CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
+              q_call_array = '''INSERT INTO calls(user_id, call_id, question, answer, response)
+                                VALUES (%(user_id)s, %(call_id)s, %(question)s, %(answer)s, %(response)s)'''
+              db.execute(q_call_array, {"user_id": user_id, "call_id": call_id, "question": question, "answer": answer, "response": response})
             # q_call_array = ('''SELECT calls FROM USERS
             #                  WHERE id = {}''').format(user_id)
             # db.execute(q_call_array)

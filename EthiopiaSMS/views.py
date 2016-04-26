@@ -161,7 +161,7 @@ def send_to_list(database_users):
     # TWO Important functions: Adds call to db & sends call
     for user_entry in database_users:
         call_id = send_call(user_entry['cell_phone'], user_entry['id'])
-        add_call_to_db(user_entry['id'], call_id, None, None)
+        add_call_to_db(user_entry['id'], call_id, None, None, False)
 
 
 @app.route("/get_csv", methods=["POST"])
@@ -239,10 +239,10 @@ def voice():
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0."
         if question_info['init'] is None:
           gather.say(option, language="es", loop=0)
-          add_call_to_db(caller_info, None, option, None)
+          add_call_to_db(caller_info, None, option, None, True)
         else:
           gather.say(question_info['init'], language="es", loop=0)
-          add_call_to_db(caller_info, None, question_info['init'], None)
+          add_call_to_db(caller_info, None, question_info['init'], None, True)
     return str(response)
 
 @app.route('/gather', methods=['POST'])
@@ -257,26 +257,26 @@ def gather():
         with response.gather(numDigits=1, action=action) as gather:
           option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not."
           if question_info['1'] is None:
-            add_call_to_db(caller_info, None, option, int(digits))
+            add_call_to_db(caller_info, None, option, int(digits), True)
             gather.say(option, language="es", loop=0)
           else:
-            add_call_to_db(caller_info, None, question_info['1'], int(digits))
+            add_call_to_db(caller_info, None, question_info['1'], int(digits), True)
             gather.say(question_info['1'], language="es", loop=0)
     elif digits == "2":
         option = "Thank you for telling us it did rain. Goodbye."
         if question_info['2'] is None:
-          add_call_to_db(caller_info, None, option, int(digits))
+          add_call_to_db(caller_info, None, option, int(digits), True)
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info['2'], int(digits))
+          add_call_to_db(caller_info, None, question_info['2'], int(digits), True)
           response.say(question_info['2'], language="es", loop=0)
     else:
         option = "Thank you for telling us it did not rain. Goodbye."
         if question_info['3'] is None:
-          add_call_to_db(caller_info, None, option, int(digits))
+          add_call_to_db(caller_info, None, option, int(digits), True)
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info['3'], int(digits))
+          add_call_to_db(caller_info, None, question_info['3'], int(digits), True)
           response.say(question_info['3'], language="es", loop=0)
     return str(response)
 
