@@ -15,12 +15,13 @@
 
   <h1>Upload new File or Add Text To Call</h1>
 
-  <h2> Here are Question Defaults </h2>
+  <h4>Question Defaults </h4>
 
   {% if question_info %}
-    {% for q in question_info %}
-      <p><b>{{q}}</b></p>
-    {% endfor %}
+    <p>Init: {{question_info['init']}}</p>
+    <p>On Press 1: {{question_info['1']}}</p>
+    <p>On Press 2: {{question_info['2']}}</p>
+    <p>On Press 3/End Call: {{question_info['3']}}</p>
   {% else %}
     <p> No defaults. Add some below! </p>
   {% endif %}

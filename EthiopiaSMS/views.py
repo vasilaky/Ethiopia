@@ -19,7 +19,7 @@ ethiopia_info = {
     "villages": [],
     "message": ""
 }
-question_info = []
+question_info = {"init": None, "1": None, "2": None, "3":None}
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
@@ -236,12 +236,12 @@ def voice():
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0."
-        if question_info[0] is None:
+        if question_info['init'] is None:
           gather.say(option, language="es", loop=0)
           add_call_to_db(caller_info, None, option, None)
         else:
-          gather.say(question_info[0], language="es", loop=0)
-          add_call_to_db(caller_info, None, question_info[0], None)
+          gather.say(question_info['init'], language="es", loop=0)
+          add_call_to_db(caller_info, None, question_info['init'], None)
     return str(response)
 
 @app.route('/gather', methods=['POST'])
@@ -255,28 +255,28 @@ def gather():
     if digits == "1":
         with response.gather(numDigits=1, action=action) as gather:
           option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not."
-          if question_info[1] is None:
+          if question_info['1'] is None:
             add_call_to_db(caller_info, None, option, int(digits))
             gather.say(option, language="es", loop=0)
           else:
-            add_call_to_db(caller_info, None, question_info[1], int(digits))
-            gather.say(question_info[1], language="es", loop=0)
+            add_call_to_db(caller_info, None, question_info['1'], int(digits))
+            gather.say(question_info['1'], language="es", loop=0)
     elif digits == "2":
         option = "Thank you for telling us it did rain. Goodbye."
-        if question_info[2] is None:
+        if question_info['2'] is None:
           add_call_to_db(caller_info, None, option, int(digits))
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info[2], int(digits))
-          response.say(question_info[2], language="es", loop=0)
+          add_call_to_db(caller_info, None, question_info['2'], int(digits))
+          response.say(question_info['2'], language="es", loop=0)
     else:
         option = "Thank you for telling us it did not rain. Goodbye. Dehina Huni"
-        if question_info[3] is None:
+        if question_info['3'] is None:
           add_call_to_db(caller_info, None, option, int(digits))
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info[3], int(digits))
-          response.say(question_info[3], language="es", loop=0)
+          add_call_to_db(caller_info, None, question_info['3'], int(digits))
+          response.say(question_info['3'], language="es", loop=0)
     return str(response)
 
 @app.route("/add_message", methods =["GET", "POST"])
@@ -284,10 +284,10 @@ def add_msg():
 
   if request.method == "POST":
     global question_info
-    question_info.append(request.form.get('q1'))
-    question_info.append(request.form.get('q2'))
-    question_info.append(request.form.get('q3'))
-    question_info.append(request.form.get('q4'))
+    question_info['init'] = request.form.get('q1')
+    question_info['1'] = request.form.get('q2')
+    question_info['2'] = request.form.get('q3')
+    question_info['3'] = request.form.get('q4')
     # if file and allowed_file(file.filename):
     #   filename = secure_filename(file.filename)
     #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
