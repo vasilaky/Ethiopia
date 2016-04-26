@@ -15,7 +15,7 @@ def send_call(to_number, db_id):
         from_=FROM_NUMBER,
         to=to_number,
         url=fallback_url,
-        record=True
+        record=False
     )
 
     return call.sid

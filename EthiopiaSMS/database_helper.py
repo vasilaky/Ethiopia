@@ -61,23 +61,33 @@ def get_user_info_from_id_list(id_list):
 
 
 # Fetching Calls from the database
-def add_call_to_db(user_id, call_info):
+def add_call_to_db(user_id, call_id, *question, **answer):
     with connect(DATABASE_URL) as conn:
         with dict_cursor(conn) as db:
-            q_call_array = ('''SELECT calls FROM USERS
-                             WHERE id = {}''').format(user_id)
-            db.execute(q_call_array)
-            result = db.fetchone()
-            if result['calls'] is None:
-                q = ('''UPDATE USERS SET CALLS = ARRAY[\'{call_info}\']
-                      WHERE id={user_id}''').format(call_info=call_info,
-                                                    user_id=user_id)
-                print q
+            # if it is just the initial call, we'll insert that so we know we called someone
+            if not question and not answer:
+              q_call_array = ('''INSERT INTO calls(user_id, call_id)
+                                VALUES({},\'{}\' ) ''').format(int(user_id), call_id)
+              db.execute(q_call_array)
             else:
-                q = ('''UPDATE USERS SET CALLS = array_append(ARRAY{}, \'{}\')
-                      WHERE id={}''').format(result['calls'],
-                                             call_info, user_id)
-                print q
-            db.execute(q)
+              q_call_array = ('''INSERT INTO calls(user_id, call_id, question, answer)
+                                VALUES({},\'{}\', \'{}\', {}) ''').format(int(user_id), call_id, question, answer)
+              db.execute(q_call_array)
+              print "ADDED CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
+            # q_call_array = ('''SELECT calls FROM USERS
+            #                  WHERE id = {}''').format(user_id)
+            # db.execute(q_call_array)
+            # result = db.fetchone()
+            # if result['calls'] is None:
+            #     q = ('''UPDATE USERS SET CALLS = ARRAY[\'{call_info}\']
+            #           WHERE id={user_id}''').format(call_info=call_info,
+            #                                         user_id=user_id)
+            #     print q
+            # else:
+            #     q = ('''UPDATE USERS SET CALLS = array_append(ARRAY{}, \'{}\')
+            #           WHERE id={}''').format(result['calls'],
+            #                                  call_info, user_id)
+            #     print q
+            # db.execute(q)
 
 # Check for Region in database so we can call by reg

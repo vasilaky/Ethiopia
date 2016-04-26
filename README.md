@@ -1,12 +1,14 @@
 # EthiopiaSMS
 ### How to Set Up For the First Time
-1) Create an `.env` file with all the variables from the `config.py` file defined. The structure is as follows:
+1) Create an `.env` file with all the variables from the `config.py` file defined. All of the actual values are in the heroku account. The structure is as follows:
    ```
-  export TO_NUMBER="[Actual Phone Number]"
-  export FROM_NUMBER="[Actual Phone Number]"
+  export FROM_NUMBER_SA="[Actual Phone Number, SOUTH AFRICAN]"
+  export FROM_NUMBER_DR="[Actual Phone Number, DOMINICAN REPUBLIC]"
   export ACCOUNT_SID="[Our Twilio Account SID]"
   export AUTH_TOKEN="[Our Twilio Auth Token]"
   export DATABASE_URL="[Database_Url]"
+  export USERNAME="[In Heroku Settings]"
+  export PASSWORD="[In Heroku Settings]"
   ```
 
 2) Type `source .env` to upload your environment variables into local memory.
@@ -19,7 +21,13 @@
 - Then install all the requirements! with `pip install -r requirements.txt`
 
 ### How to Run the Application
-1) Run the app with `python run.py`
+1) Uncomment the following lines from `run.py` only when you're running locally. If you uncomment them before deploying to github, the site will not work.
+```
+  # port = int(os.environ.get('PORT', 13336))
+  # app.run(port=port,debug=True)
+```
+
+2) Run the app with `python run.py`
 
 ## Organization/Directory Structure
 ```

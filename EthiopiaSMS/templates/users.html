@@ -3,12 +3,13 @@
 
 <ul class="nav nav-tabs nav-justified">
   <li role="presentation"> <a href="/"> Home </a> </li>
+  <li role="presentation"> <a href="/add_message"> Add Message </a></li>
   <li role="presentation" class="active"> <a href="/users"> Users </a></li>
   <li role="presentation"> <a href="/calls"> Call History </a></li>
 </ul>
-      <div class="row">
 
 
+<div class="row">
     <div class="col-md-5 col-sm-offset-1">
           <h1> Add a new user </h1>
           <br>
@@ -33,7 +34,7 @@
           </datalist>
           <br><br>
           Villages: <br>
-          <input class="tform-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
+          <input class="form-control" type="text" name="villages" list="namesvillage" placeholder="Village Name">
             <datalist id="namesvillage">
             {% for village in ethiopia_info.village %}
               <option>{{village}}</option>
@@ -54,8 +55,8 @@
         <!-- <th> Id </th> -->
         <th> Name </th>
         <th> Cell Phone </th>
-        <th> Region </th>
         <th> Village </th>
+        <th> Region </th>
         <th> Times Called (since adding to db) </th>
       </tr>
       <form method="post" action="send_call_route">
@@ -82,7 +83,6 @@
     <label class="radio-inline"><input type="radio" name="options" value="sms">Send SMS</input></label>
     <label class="radio-inline"><input type="radio" name="options" value="delete">Detele user</input></label>
     <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
-    <input class="tform-control" name="question" type="text"> Input your question here
     </form>
     <p>
     <div style="display:none" id="call_sent" class="col-md-offset-10"> Success! </div></p>

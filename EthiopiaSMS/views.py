@@ -19,6 +19,7 @@ ethiopia_info = {
     "villages": [],
     "message": ""
 }
+question_info = []
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
@@ -28,10 +29,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 basic_auth = BasicAuth(app)
 
-# @app.route('/secret')
-# @basic_auth.required
-# def secret_view():
-#     return render_template('secret.html')
 
 def allowed_file(filename):
     return '.' in filename
@@ -58,19 +55,6 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/record_message", methods =["GET", "POST"])
-def record():
-  listofsounds = []
-  if request.method == "POST":
-    file = request.files['file']
-    if file and allowed_file(file.filename):
-      filename = secure_filename(file.filename)
-      print os.path
-      file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-      return redirect(url_for('uploaded_file',
-                              filename=filename))
-  return render_template("record.html", listofsounds=listofsounds)
-
 
 def check_user(user_entry):
     # simple check on user info
@@ -92,7 +76,6 @@ def check_user(user_entry):
 
 
 @app.route("/users", methods=["GET", "POST"])
-# @basic_auth.required
 def users():
     date = datetime.datetime.utcnow()
     date = date + datetime.timedelta(hours=3)
@@ -144,10 +127,12 @@ def users():
 
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
+    print question_info
 
     # For doing actions to a list of people selected on our front end
     option = request.form["options"]
     selected = request.form.getlist("select", None)
+    print selected
     if (option == "voice"):
         send_to_list(get_user_info_from_id_list(selected))
     elif (option == "delete"):
@@ -241,6 +226,93 @@ def synch():
                   }
                 }''' % (str(ts))
 
+@app.route('/voice', methods=['POST', 'GET'])
+def voice():
+    ### Docs: http://twilio-python.readthedocs.org/en/latest/api/twiml.html#primary-verbs
+    print "we are calling: {}".format(request.args.get('caller'))
+    caller_info = request.args.get('caller')
+    response = twiml.Response()
+    action = "/gather?caller={}".format(caller_info)
+    with response.gather(numDigits=1, action=action) as gather:
+        # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
+        option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0."
+        if question_info[0] is None:
+          gather.say(option, language="es", loop=0)
+          add_call_to_db(caller_info, None, option, None)
+        else:
+          gather.say(question_info[0], language="es", loop=0)
+          add_call_to_db(caller_info, None, question_info[0], None)
+    return str(response)
+
+@app.route('/gather', methods=['POST'])
+def gather():
+    caller_info = request.args.get('caller')
+    action = "/gather?caller={}".format(caller_info)
+    response = twiml.Response()
+    digits = request.form['Digits']
+    print digits
+    # append digit to our db
+    if digits == "1":
+        with response.gather(numDigits=1, action=action) as gather:
+          option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not."
+          if question_info[1] is None:
+            add_call_to_db(caller_info, None, option, int(digits))
+            gather.say(option, language="es", loop=0)
+          else:
+            add_call_to_db(caller_info, None, question_info[1], int(digits))
+            gather.say(question_info[1], language="es", loop=0)
+    elif digits == "2":
+        option = "Thank you for telling us it did rain. Goodbye."
+        if question_info[2] is None:
+          add_call_to_db(caller_info, None, option, int(digits))
+          response.say(option, language="es", loop=0)
+        else:
+          add_call_to_db(caller_info, None, question_info[2], int(digits))
+          response.say(question_info[2], language="es", loop=0)
+    else:
+        option = "Thank you for telling us it did not rain. Goodbye. Dehina Huni"
+        if question_info[3] is None:
+          add_call_to_db(caller_info, None, option, int(digits))
+          response.say(option, language="es", loop=0)
+        else:
+          add_call_to_db(caller_info, None, question_info[3], int(digits))
+          response.say(question_info[3], language="es", loop=0)
+    return str(response)
+
+@app.route("/add_message", methods =["GET", "POST"])
+def add_msg():
+
+  if request.method == "POST":
+    global question_info
+    question_info.append(request.form.get('q1'))
+    question_info.append(request.form.get('q2'))
+    question_info.append(request.form.get('q3'))
+    question_info.append(request.form.get('q4'))
+    # if file and allowed_file(file.filename):
+    #   filename = secure_filename(file.filename)
+    #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #   return redirect(url_for('uploaded_file',
+    #                           filename=filename))
+  return render_template("record.html", question_info=question_info)
+
+#################
+#
+# The Following Routes are not used
+#
+#################
+
+@app.route("/record_message", methods =["GET", "POST"])
+def record():
+  listofsounds = []
+  if request.method == "POST":
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+      filename = secure_filename(file.filename)
+      file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+      return redirect(url_for('uploaded_file',
+                              filename=filename))
+  return render_template("record.html", listofsounds=listofsounds)
+
 @app.route("/xml", methods=["GET", "POST"])
 def return_xml():
   xml = """<?xml version="1.0" encoding="UTF-8"?>
@@ -264,33 +336,4 @@ def get_digits():
     <Say voice="woman" language="en-US">You Entered {} For the Questions We asked</Say>
 </Response>""".format(digits)
   return Response(xml, mimetype='text/xml')
-
-@app.route('/voice', methods=['POST', 'GET'])
-def voice():
-    print "we are calling: {}".format(request.args.get('caller'))
-    response = twiml.Response()
-    with response.gather(numDigits=1, action="/gather") as gather:
-        # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
-        gather.say("Welcome to Ethiopia SMS. Did it rain yesterday? If it rained yesterday press 1. If not press 0.")
-    return str(response)
-
-@app.route('/gather', methods=['POST'])
-def gather():
-    response = twiml.Response()
-    digits = request.form['Digits']
-    print digits
-    # append digit to our db
-    if digits == "1":
-        with response.gather(numDigits=1, action="/gather") as gather:
-          gather.say("Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not.")
-    elif digits == "2":
-      response.say("Thank you for telling us it did rain. Goodbye. Dehina Huni")
-    else:
-        response.say("Thank you for telling us it did not rain. Goodbye. Dehina Huni")
-    return str(response)
-
-
-@app.route("/send_text", methods=["GET", "POST"])
-def send_text():
-  return render_template("messages.html")
 
