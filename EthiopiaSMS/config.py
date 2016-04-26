@@ -10,3 +10,5 @@ FROM_NUMBER = os.environ["FROM_NUMBER_DR"]
 DATABASE_URL = os.environ["DATABASE_URL"]
 USERNAME = os.environ["USERNAME"]
 PASSWORD = os.environ["PASSWORD"]
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
+APP_STATIC = os.path.join(APP_ROOT, 'static')

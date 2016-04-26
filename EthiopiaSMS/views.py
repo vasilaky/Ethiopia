@@ -23,7 +23,7 @@ ethiopia_info = {
 
 
 def write_questions(questions):
-  with open('questions.json') as f:
+  with open(os.path.join(APP_STATIC,'questions.json')) as f:
     q_data = json.load(f)
   if questions['init']:
     q_data['init'] = questions['init']
@@ -37,12 +37,12 @@ def write_questions(questions):
   if questions['3']:
     q_data['3'] = questions['3']
 
-  with io.open('questions.json', 'w', encoding='utf-8') as f:
+  with io.open(os.path.join(APP_STATIC,'questions.json'), 'w', encoding='utf-8') as f:
     f.write(unicode(json.dumps(q_data, ensure_ascii=False)))
 
 
 def get_questions():
-  with open('questions.json') as f:
+  with open(os.path.join(APP_STATIC,'questions.json')) as f:
     q_data = json.load(f)
   return q_data
 
