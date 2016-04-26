@@ -61,7 +61,7 @@ def get_user_info_from_id_list(id_list):
 
 
 # Fetching Calls from the database
-def add_call_to_db(user_id, call_id, *question, **answer):
+def add_call_to_db(user_id, call_id, question, answer):
     with connect(DATABASE_URL) as conn:
         with dict_cursor(conn) as db:
             # if it is just the initial call, we'll insert that so we know we called someone
