@@ -263,7 +263,6 @@ def voice():
     question = request.args.get('question')
     response = twiml.Response()
     action = "/gather?caller={}&question={}".format(caller_info, question)
-    global question_info
     question_info = get_questions()
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
@@ -321,7 +320,6 @@ def add_msg():
     question_info['2'] = request.form.get('q3')
     question_info['3'] = request.form.get('q4')
     write_questions(question_info)
-    global question_info
     question_info = get_questions()
     # if file and allowed_file(file.filename):
     #   filename = secure_filename(file.filename)
