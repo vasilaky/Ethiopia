@@ -43,7 +43,7 @@ def write_questions(questions):
 
 def get_questions():
   with open(os.path.join(APP_STATIC,'questions.json')) as f:
-    q_data = json.load(f).encode('utf8')
+    q_data = json.load(f)
   return q_data
 
 
