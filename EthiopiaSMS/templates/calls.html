@@ -16,21 +16,19 @@
         <button class="btn btn-default" type="submit" value="Get CSV of Calls" /> Download CSV</button>
       </form>
         <tr>
-          <th> Cell Phone </th>
-          <th> Call Start Time </th>
-          <th> Call Status </th>
-          <th> Call Duration </th>
-          <th> Re-send Call? </th>
-          <th> CallID </th>
+          <th> Name </th>
+          <th> Region </th>
+          <th> Question </th>
+          <th> Answer </th>
+          <th> Timestamp </th>
         </tr>
         {% for call in call_list %}
         <tr class="highlightee" id="{{ call.sid }}">
-          <td>{{ call.to }} </td>
-          <td>{{ call.start_time }}</td>
-          <td>{{ call.status }}</td>
-          <td>{{ call.duration }}</td>
-          <td><input name="send" value="{{call.sid}}" type="checkbox"></td>
-          <td> {{ call.sid }} </td>
+          <td>{{ call['name'] }} </td>
+          <td>{{ call['region']  }}</td>
+          <td>{{ call['question']  }}</td>
+          <td>{{ call['answer']  }}</td>
+          <td> {{ call['timestamp']  }} </td>
         </tr>
         {% endfor %}
       </table>

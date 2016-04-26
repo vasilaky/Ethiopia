@@ -94,3 +94,13 @@ def add_call_to_db(user_id, call_id, question, answer, response):
             # db.execute(q)
 
 # Check for Region in database so we can call by reg
+
+#
+def db_get_call_logs():
+  with connect(DATABASE_URL) as conn:
+    with dict_cursor(conn) as db:
+      select_string = "SELECT u.name,u.region,c.question,c.answer,c.timestamp FROM CALLS c, USERS u WHERE c.user_id=u.id"
+      db.execute(select_string)
+      result = db.fetchall()
+
+  return result

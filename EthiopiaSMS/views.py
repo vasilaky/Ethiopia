@@ -19,7 +19,11 @@ ethiopia_info = {
     "villages": [],
     "message": ""
 }
-question_info = {"init": None, "1": None, "2": None, "3":None}
+question_info = {"init": "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0.",
+"1": "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not.",
+"2": "Thank you for telling us it did rain. Goodbye.",
+"3":"Thank you for telling us it did not rain. Goodbye."}
+
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
@@ -127,7 +131,6 @@ def users():
 
 @app.route("/send_call_route", methods=["POST", "GET"])
 def send_call_route():
-    print question_info
 
     # For doing actions to a list of people selected on our front end
     option = request.form["options"]
@@ -172,7 +175,7 @@ def foo():
 
 @app.route("/calls", methods=["GET", "POST"])
 def calls():
-    call_list = get_call_logs()
+    call_list = db_get_call_logs()
     return render_template("calls.html", call_list=call_list)
 
 @app.route("/smssynch", methods=["GET", "POST"])
@@ -231,53 +234,53 @@ def voice():
     ### Docs: http://twilio-python.readthedocs.org/en/latest/api/twiml.html#primary-verbs
     print "we are calling: {}".format(request.args.get('caller'))
     caller_info = request.args.get('caller')
+    question = request.args.get('question')
     response = twiml.Response()
-    action = "/gather?caller={}".format(caller_info)
-    print question_info
+    action = "/gather?caller={}&question={}".format(caller_info, question)
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
-        option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0."
-        if question_info['init'] is None:
-          gather.say(option, language="es", loop=0)
-          add_call_to_db(caller_info, None, option, None, True)
-        else:
-          gather.say(question_info['init'], language="es", loop=0)
-          add_call_to_db(caller_info, None, question_info['init'], None, True)
+        option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
+        question = question_info.get('init', option)
+
+        gather.say(question, language="es", loop=0)
+
     return str(response)
 
 @app.route('/gather', methods=['POST'])
 def gather():
     caller_info = request.args.get('caller')
-    action = "/gather?caller={}".format(caller_info)
+    question = request.args.get('question')
+    digits = request.form['Digits'] #These are the inputted numbers
+
     response = twiml.Response()
-    digits = request.form['Digits']
+
+    print question_info.get(question)
     print digits
-    # append digit to our db
+    add_call_to_db(caller_info, None, question_info.get(question), digits, True)
+
     if digits == "1":
+        action = "/gather?caller={}&question=1".format(caller_info)
         with response.gather(numDigits=1, action=action) as gather:
-          option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not."
-          if question_info['1'] is None:
-            add_call_to_db(caller_info, None, option, int(digits), True)
-            gather.say(option, language="es", loop=0)
-          else:
-            add_call_to_db(caller_info, None, question_info['1'], int(digits), True)
-            gather.say(question_info['1'], language="es", loop=0)
+          option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 3 if it has, Press 0 if it has not."
+          question = question_info.get('1', option)
+
+          # add_call_to_db(caller_info, None, question, int(digits), True)
+          gather.say(question, language="es", loop=0)
+
     elif digits == "2":
-        option = "Thank you for telling us it did rain. Goodbye."
-        if question_info['2'] is None:
-          add_call_to_db(caller_info, None, option, int(digits), True)
-          response.say(option, language="es", loop=0)
-        else:
-          add_call_to_db(caller_info, None, question_info['2'], int(digits), True)
-          response.say(question_info['2'], language="es", loop=0)
+        action = "/gather?caller={}&question=2".format(caller_info)
+        with response.gather(numDigits=1, action=action) as gather:
+          option = "Thank you for telling us it did not rain."
+          question = question_info.get('2', option)
+          # add_call_to_db(caller_info, None, question, int(digits), True)
+          response.say(question, language="es", loop=1)
+
     else:
-        option = "Thank you for telling us it did not rain. Goodbye."
-        if question_info['3'] is None:
-          add_call_to_db(caller_info, None, option, int(digits), True)
-          response.say(option, language="es", loop=0)
-        else:
-          add_call_to_db(caller_info, None, question_info['3'], int(digits), True)
-          response.say(question_info['3'], language="es", loop=0)
+        option = "Thank you for telling us it did rain. Goodbye."
+        question = question_info.get('3', option)
+
+        add_call_to_db(caller_info, None, question, None, True)
+        response.say(option, language="es", loop=1)
     return str(response)
 
 @app.route("/add_message", methods =["GET", "POST"])
