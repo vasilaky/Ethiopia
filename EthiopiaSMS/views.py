@@ -238,10 +238,10 @@ def voice():
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 0."
         if question_info['init'] is None:
           gather.say(option, language="es", loop=0)
-          add_call_to_db(caller_info, None, option, None)
+          add_call_to_db(caller_info, None, option, answer=None)
         else:
           gather.say(question_info['init'], language="es", loop=0)
-          add_call_to_db(caller_info, None, question_info['init'], None)
+          add_call_to_db(caller_info, None, question_info['init'], answer=None)
     return str(response)
 
 @app.route('/gather', methods=['POST'])
@@ -256,26 +256,26 @@ def gather():
         with response.gather(numDigits=1, action=action) as gather:
           option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 2 if it has, Press 0 if it has not."
           if question_info['1'] is None:
-            add_call_to_db(caller_info, None, option, int(digits))
+            add_call_to_db(caller_info, None, option, answer=int(digits))
             gather.say(option, language="es", loop=0)
           else:
-            add_call_to_db(caller_info, None, question_info['1'], int(digits))
+            add_call_to_db(caller_info, None, question_info['1'], answer=int(digits))
             gather.say(question_info['1'], language="es", loop=0)
     elif digits == "2":
         option = "Thank you for telling us it did rain. Goodbye."
         if question_info['2'] is None:
-          add_call_to_db(caller_info, None, option, int(digits))
+          add_call_to_db(caller_info, None, option, answer=int(digits))
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info['2'], int(digits))
+          add_call_to_db(caller_info, None, question_info['2'], answer=int(digits))
           response.say(question_info['2'], language="es", loop=0)
     else:
-        option = "Thank you for telling us it did not rain. Goodbye. Dehina Huni"
+        option = "Thank you for telling us it did not rain. Goodbye."
         if question_info['3'] is None:
-          add_call_to_db(caller_info, None, option, int(digits))
+          add_call_to_db(caller_info, None, option, answer=int(digits))
           response.say(option, language="es", loop=0)
         else:
-          add_call_to_db(caller_info, None, question_info['3'], int(digits))
+          add_call_to_db(caller_info, None, question_info['3'], answer=int(digits))
           response.say(question_info['3'], language="es", loop=0)
     return str(response)
 

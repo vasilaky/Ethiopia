@@ -70,9 +70,13 @@ def add_call_to_db(user_id, call_id, *question, **answer):
                                 VALUES({},\'{}\' ) ''').format(int(user_id), call_id)
               db.execute(q_call_array)
             else:
+              if answer == "None":
+                answer = 0000
+              question = str(question.replace("'", ""))
+              print "ADDING CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
               q_call_array = ('''INSERT INTO calls(user_id, call_id, question, answer)
-                                VALUES({},\'{}\', \'{}\', {}) ''').format(int(user_id), call_id, question, answer)
-              db.execute(q_call_array)
+                                VALUES (%(user_id)s, %(call_id)s, %(question)s, %(answer)s)'''
+              db.execute(q_call_array, {"user_id": user_id, "call_id": call_id, "question": question, "answer": answer})
               print "ADDED CALL {} {} {} {} to the DB".format(user_id, call_id, question, answer)
             # q_call_array = ('''SELECT calls FROM USERS
             #                  WHERE id = {}''').format(user_id)
