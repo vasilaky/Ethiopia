@@ -1,5 +1,5 @@
 from EthiopiaSMS import app
-from flask import render_template, request, redirect, url_for, Response
+from flask import render_template, request, redirect, url_for, Response, make_response
 from werkzeug import secure_filename
 from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
@@ -44,12 +44,12 @@ def write_questions(questions):
 def get_questions():
   with open(os.path.join(APP_STATIC,'questions.json')) as f:
     q_data = json.load(f)
-  print q_data
+
   return q_data
 
 
 question_info = get_questions()
-print question_info
+
 
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
@@ -329,6 +329,26 @@ def add_msg():
     #   return redirect(url_for('uploaded_file',
     #                           filename=filename))
   return render_template("record.html", question_info=question_info)
+
+@app.route('/large.csv')
+def generate_large_csv():
+    csv = "'name','region','question','answer','timestamp','call_id'\n"
+    call_list = db_get_call_logs()
+    for call in call_list:
+      if call['question']:
+        q = str(call['question'].encode('utf-8')).replace(',', '')
+
+        csv += "{},{},{},{},{},{}\n".format(call['name'],call['region'],q,call['answer'],call['timestamp'],call['call_id'])
+      else:
+        csv += "{},{},{},{},{},{}\n".format(call['name'],call['region'],call['question'],call['answer'],call['timestamp'],call['call_id'])
+
+
+    response = make_response(csv)
+
+    response.headers["Content-Disposition"] = "attachment; filename=calls.csv"
+
+    return Response(csv, mimetype='text/csv')
+
 
 #################
 #

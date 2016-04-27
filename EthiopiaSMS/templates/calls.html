@@ -9,35 +9,48 @@
   <li role="presentation" class="active"> <a href="/calls"> Call History </a></li>
 </ul>
 
-<div class="col-md-10 col-xs-offset-1">
-      <table class="table table-hover table-bordered table-striped">
-        <h2 > Call History </h2>
-        <form name="get_csv" action="/get_csv" method="post">
-        <button class="btn btn-default" type="submit" value="Get CSV of Calls" /> Download CSV</button>
-      </form>
-        <tr>
-          <th> Name </th>
-          <th> Region </th>
-          <th> Question </th>
-          <th> Answer </th>
-          <th> Timestamp </th>
-          <th> CallSid </th>
-        </tr>
-        {% for call in call_list %}
-        <tr class="highlightee" id="{{ call.sid }}">
-          <td>{{ call['name'] }} </td>
-          <td>{{ call['region']  }}</td>
-          <td>{{ call['question']  }}</td>
-          <td>{{ call['answer']  }}</td>
-          <td> {{ call['timestamp']  }} </td>
-          <td>
-            {% if call['call_id'] %}
-              <a target="_blank" href="https://www.twilio.com/user/account/log/calls/{{call['call_id']}}">Link</a>
-            {% endif %}
+<div class="container">
+  <h2 > Call History </h2>
+  <div class="col-xs-12" style="height:10px;"></div>
+  <div class="control-group">
+    <div class=" inline-form ">
+      <form name="get_csv" action="/get_csv" method="post">
+        <button class="btn btn-default btn-lg" type="submit" value="Get CSV of Calls" /> Download Twilio Records (Password Needed)</button>
+      </div>
+    </form>
+    <div class="col-xs-12" style="height:10px;"></div>
+    <a href="/large.csv"><button class="btn btn-primary btn-lg" /> Download This Table as CSV</button></a>
 
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
+  </div>
+<div class="col-xs-12" style="height:40px;"></div>
+
+  <div class="col-md-14">
+    <table class="table table-hover table-bordered table-striped col-md-10">
+
+      <tr>
+        <th> Name </th>
+        <th> Region </th>
+        <th> Question </th>
+        <th> Answer </th>
+        <th> Timestamp (UTC)</th>
+        <th> CallSid </th>
+      </tr>
+      {% for call in call_list|sort(attribute='timestamp', reverse=True) %}
+      <tr class="highlightee" id="{{ call.sid }}">
+        <td>{{ call['name'] }} </td>
+        <td>{{ call['region']  }}</td>
+        <td>{{ call['question']  }}</td>
+        <td>{{ call['answer']  }}</td>
+        <td> {{ call['timestamp'].strftime('%H:%M:%S, %m-%d-%Y')  }} </td>
+        <td>
+          {% if call['call_id'] %}
+          <a target="_blank" href="https://www.twilio.com/user/account/log/calls/{{call['call_id']}}">Link</a>
+          {% endif %}
+
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
 {% endblock %}
