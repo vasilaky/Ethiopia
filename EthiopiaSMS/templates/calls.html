@@ -30,7 +30,12 @@
           <td>{{ call['question']  }}</td>
           <td>{{ call['answer']  }}</td>
           <td> {{ call['timestamp']  }} </td>
-          <td> <a target="_blank" href="https://www.twilio.com/user/account/log/calls/{{call['call_id']}}">Link</a> </td>
+          <td>
+            {% if call['call_id'] %}
+              <a target="_blank" href="https://www.twilio.com/user/account/log/calls/{{call['call_id']}}">Link</a>
+            {% endif %}
+
+          </td>
         </tr>
         {% endfor %}
       </table>
