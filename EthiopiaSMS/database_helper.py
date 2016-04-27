@@ -103,6 +103,7 @@ def db_get_call_logs():
       result = db.fetchall()
 
       for r in result:
-        r['question'] = r['question'].encode("utf-8")
+        if r['question']:
+          r['question'] = r['question'].decode("utf-8")
 
   return result
