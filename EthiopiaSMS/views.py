@@ -38,7 +38,7 @@ def write_questions(questions):
     q_data['3'] = questions['3']
 
   with io.open(os.path.join(APP_STATIC,'questions.json'), 'w', encoding='utf8') as f:
-    f.write(json.dump(q_data, ensure_ascii=False))
+    f.write(json.dumps(q_data, ensure_ascii=False))
 
 
 def get_questions():
@@ -269,7 +269,7 @@ def voice():
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
         question = question_info.get('init', option)
-        response.pause(length=2)
+        response.pause(length=1)
 
         gather.say(question, language="es", loop=0)
 
