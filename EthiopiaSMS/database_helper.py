@@ -1,5 +1,5 @@
 from psycopg2 import connect, extras
-from config import *
+from EthiopiaSMS.config import *
 
 #
 # Setup for DB
@@ -54,7 +54,7 @@ def get_user_info_from_id_list(id_list):
                 q = 'SELECT * FROM USERS WHERE id = {}'.format(id_number)
                 db.execute(q)
                 result = db.fetchone()
-                print "Fetched {user} from our database".format(user=result)
+                print ("Fetched {user} from our database").format(user=result)
                 user_info.append(result)
 
     return user_info
@@ -71,8 +71,8 @@ def add_call_to_db(user_id, call_id, question, answer, response):
               db.execute(q_call_array)
             else:
               if answer == "None":
-                answer = 01234
-              print "ADDING CALL user:{} call:{} q:{} a:{} to the DB".format(user_id, call_id, question.encode("utf-8"), answer)
+                answer = 1234
+              print ("ADDING CALL user:{} call:{} q:{} a:{} to the DB").format(user_id, call_id, question.encode("utf-8"), answer)
               q_call_array = '''INSERT INTO calls(user_id, call_id, question, answer, response)
                                 VALUES (%(user_id)s, %(call_id)s, %(question)s, %(answer)s, %(response)s)'''
               db.execute(q_call_array, {"user_id": user_id, "call_id": call_id, "question": question, "answer": answer, "response": response})

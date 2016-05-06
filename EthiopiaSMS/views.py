@@ -1,13 +1,12 @@
 from EthiopiaSMS import app
 from flask import render_template, request, redirect, url_for, Response, make_response
 from werkzeug import secure_filename
-from flask.ext.basicauth import BasicAuth
 from twilio.rest import TwilioRestClient
 from twilio import twiml
 import subprocess
-from config import *
-from database_helper import *
-from twilio_helper import *
+from EthiopiaSMS.config import *
+from EthiopiaSMS.database_helper import *
+from EthiopiaSMS.twilio_helper import *
 import datetime
 import json
 import time
@@ -22,7 +21,7 @@ ethiopia_info = {
 }
 
 
-def write_questions(questions):
+def questions():
   with open(os.path.join(APP_STATIC,'questions.json')) as f:
     q_data = json.load(f)
   if questions['init']:
@@ -51,14 +50,14 @@ def get_questions():
 question_info = get_questions()
 
 
-app.config['BASIC_AUTH_USERNAME'] = USERNAME
-app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
+# app.config['BASIC_AUTH_USERNAME'] = USERNAME
+# app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-basic_auth = BasicAuth(app)
+# basic_auth = BasicAuth(app)
 
 
 def allowed_file(filename):
@@ -82,7 +81,7 @@ def index():
             record="false"
         )
 
-        print call.sid
+        print (call.sid)
 
     return render_template("index.html")
 
@@ -145,7 +144,7 @@ def users():
             add_user(user_entry)
         else:
             # did not fill all required fields
-            print("counld not add user.")
+            print("could not add user.")
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -162,7 +161,7 @@ def send_call_route():
     # For doing actions to a list of people selected on our front end
     option = request.form["options"]
     selected = request.form.getlist("select", None)
-    print selected
+    print (selected)
     if (option == "voice"):
         send_to_list(get_user_info_from_id_list(selected))
     elif (option == "delete"):
@@ -172,7 +171,7 @@ def send_call_route():
     elif (option == "sms"):
         sms_text = request.form["question"]
         ethiopia_info['message'] = sms_text
-        print sms_text
+        print (sms_text)
     else:
         print("This should not be reached.")
 
@@ -215,11 +214,11 @@ def synch():
     # print request.get_json()
     # time.sleep(300)
     if task == 'send':
-      print "send task"
-      print task
+      print ("send task")
+      print (task)
       # print request.get_json()
       message = ethiopia_info.get('message')
-      print message
+      print (message)
       return '''{"payload": {
                   "success": "true",
                   "error": null,
@@ -232,17 +231,17 @@ def synch():
                   }
                   }''' % (message, str(ts))
     if task == 'sent':
-      print "sent task"
-      print task
-      print request.get_json()
+      print ("sent task")
+      print (task)
+      print (request.get_json())
       messages_response = request.get_json()
       messages = messages_response.get('queued_messages')
       return '''{"message_uuids" : %s}''' % (messages)
     else:
       message = ethiopia_info.get('message')
-      print "print other task (should send msg to phone)"
-      print message
-      print task
+      print ("print other task (should send msg to phone)")
+      print (message)
+      print (task)
       # print request.get_json()
       return '''{"payload": {
                   "success": "true",
@@ -259,10 +258,12 @@ def synch():
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
     ### Docs: http://twilio-python.readthedocs.org/en/latest/api/twiml.html#primary-verbs
-    print "we are calling: {}".format(request.args.get('caller'))
+    print ("we are calling: {}").format(request.args.get('caller'))
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     response = twiml.Response()
+    language="es"
+
     action = "/gather?caller={}&question={}".format(caller_info, question)
     question_info = get_questions()
     with response.gather(numDigits=1, action=action) as gather:
@@ -271,7 +272,7 @@ def voice():
         question = question_info.get('init', option)
         response.pause(length=1)
 
-        gather.say(question, language="es", loop=0)
+        gather.say(question, language=language, loop=0)
 
     return str(response)
 
@@ -280,7 +281,7 @@ def gather():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     digits = request.form['Digits'] #These are the inputted numbers
-
+    language="es"
     response = twiml.Response()
 
     add_call_to_db(caller_info, None, question_info.get(question), digits, True)
@@ -292,7 +293,7 @@ def gather():
           question = question_info.get('1', option)
 
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.say(question, language="es", loop=0)
+          gather.say(question, language=language, loop=0)
 
     elif digits == "2":
         action = "/gather?caller={}&question=2".format(caller_info)
@@ -300,14 +301,14 @@ def gather():
           option = "Thank you for telling us it did not rain."
           question = question_info.get('2', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          response.say(question, language="es", loop=1)
+          response.say(question, language=language, loop=1)
 
     else:
         option = "Thank you for telling us it did rain. Goodbye."
         question = question_info.get('3', option)
 
         add_call_to_db(caller_info, None, question, None, True)
-        response.say(option, language="es", loop=1)
+        response.say(option, language=language, loop=1)
     return str(response)
 
 @app.route("/add_message", methods =["GET", "POST"])
@@ -383,8 +384,8 @@ def return_xml():
 def get_digits():
   digits = request.args.get('Digits')
   json = request.get_json()
-  print digits
-  print json
+  print (digits)
+  print (json)
 
   xml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>

@@ -1,6 +1,6 @@
 # send a testing message to phone
 from twilio.rest import TwilioRestClient
-from config import *
+from EthiopiaSMS.config import *
 
 client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 
