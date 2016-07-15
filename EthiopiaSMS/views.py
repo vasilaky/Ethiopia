@@ -20,8 +20,7 @@ ethiopia_info = {
     "message": ""
 }
 
-
-def questions():
+def write_questions(questions):
   with open(os.path.join(APP_STATIC,'questions.json')) as f:
     q_data = json.load(f)
   if questions['init']:
