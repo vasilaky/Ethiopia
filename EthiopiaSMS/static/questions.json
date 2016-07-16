@@ -1,1 +1,3 @@
-{"1": "Awesome!", "init": "hello press 1 if awesome press 2 if great", "2": "Great", "3": "Goodbye"}
+{"1": " Let's gather some information. Has it rained during the past 3 days? Press 2 for 'no, it has not rained in 3 days'. Press 3 for 'Yes, it has rained within the past 3 days'.", "init": "Hello welcome to EthiopiaSMS. Press 1 if you would like to be eligible for insurance. Hang up if you are not.", "2": "Great! This is our last question. Has it rained in the past 30 days?", "3": "Sorry. You are not eligible for insurance.
+
+. Goodbye"}
