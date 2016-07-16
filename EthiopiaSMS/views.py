@@ -269,7 +269,7 @@ def voice():
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
         question = question_info.get('init', option)
-        response.pause(length=5)
+        gather.pause(length=5)
 
         gather.say(question, language=language, loop=2)
 
